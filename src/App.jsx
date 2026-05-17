@@ -16,7 +16,7 @@ export default function App() {
 
   // 選配項目及其對應價格
   const optionList = [
-    { id: 'glass', name: '落地窗', price: 45000 },
+    { id: 'glass', name: '落地玻璃門', price: 45000 },
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000 },
     { id: 'floor', name: '石墨烯地暖', price: 38000 },
     { id: 'solar', name: '太陽能系統', price: 220000 },
@@ -27,7 +27,7 @@ export default function App() {
   ]
 
   // 基礎價格與已選配狀態
-  const basePrice = 520000
+  const basePrice = 500000
   const [selectedOptions, setSelectedOptions] = useState({})
 
   // 處理複選框點擊
