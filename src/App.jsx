@@ -24,7 +24,7 @@ export default function App() {
     { id: 'terrace', name: '露台', price: 50000 },
   ]
 
-  const basePrice = 520000
+  const basePrice = 350000
   const [selectedOptions, setSelectedOptions] = useState({})
 
   const handleCheckboxChange = (id) => {
