@@ -16,9 +16,9 @@ export default function App() {
 
   // 選配項目及其對應價格
   const optionList = [
-    { id: 'glass', name: '落地玻璃門+隔熱窗', price: 45000 },
+    { id: 'glass', name: '落地門與隔音窗', price: 45000 },
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000 },
-    { id: 'floor', name: '石墨烯夾層', price: 38000 },
+    { id: 'floor', name: '石墨烯地暖', price: 38000 },
     { id: 'solar', name: '太陽能系統', price: 220000 },
     { id: 'battery', name: '儲能電池', price: 180000 },
     { id: 'offgrid', name: '離網系統', price: 120000 },
@@ -45,8 +45,8 @@ export default function App() {
 
   const totalPrice = basePrice + optionsPrice
 
-  // 請在此處將連結換成您真實的 LINE 個人連結或官方帳號網址
-  const lineUrl = "https://line.me" 
+  // 已成功更新為您的 LINE 官方帳號官方連結
+  const lineUrl = "https://lin.ee/uNjqsw8" 
 
   // 按鈕互動提示
   const handlePdfExport = () => {
@@ -55,10 +55,29 @@ export default function App() {
 
   return (
     <div className="bg-black text-white min-h-screen font-sans antialiased selection:bg-green-500 selection:text-black">
+      
+      {/* HEADER NAVBAR (頂部導覽列：含右上角小農點點 LOGO) */}
+      <header className="border-b border-zinc-900 bg-black/50 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+          <div className="text-xl font-bold font-mono tracking-wider text-white">
+            GPSH <span className="text-green-500">SMART</span>
+          </div>
+          {/* 右上角 LOGO 照片 */}
+          <div className="flex items-center">
+            <img 
+              src="/logo.png" 
+              alt="小農點點 LOGO" 
+              className="h-12 w-auto object-contain rounded-xl border border-zinc-800 bg-zinc-900/50 p-1"
+              onError={(e) => { e.target.style.display = 'none'; }} 
+            />
+          </div>
+        </div>
+      </header>
+
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-zinc-800">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black opacity-90" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-28 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-24 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="text-center lg:text-left">
             <div className="inline-block px-4 py-1 rounded-full border border-zinc-700 text-xs sm:text-sm mb-6 text-green-400 font-mono">
               Solar Expandable Smart House
@@ -79,12 +98,22 @@ export default function App() {
               </a>
             </div>
           </div>
-          {/* 高級科技占位圖 */}
-          <div className="relative aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-zinc-900 via-black to-green-950/30 flex flex-col justify-center items-center p-6 text-center">
-            <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
-            <span className="text-4xl sm:text-5xl mb-3">🏠</span>
-            <h4 className="text-base sm:text-xl font-bold text-green-400 font-mono">GPSH CONCEPT MODEL</h4>
-            <p className="text-zinc-500 text-xs sm:text-sm mt-2">可展翼式光儲充智慧一體化貨櫃屋示意</p>
+          
+          {/* 右側實體照片區塊 */}
+          <div className="relative aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-zinc-900 via-black to-green-950/30 shadow-2xl group">
+            <img 
+              src="/house-main.png" 
+              alt="翼展太陽能智能屋實體外觀" 
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2318181b'/%3E%3Cpath d='M50 30 L80 60 L20 60 Z' fill='none' stroke='%2310b981' stroke-width='2'/%3E%3C/svg%3E";
+              }}
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+              <h4 className="text-sm sm:text-base font-bold text-green-400 font-mono">GPSH REAL MODEL</h4>
+              <p className="text-zinc-400 text-xs mt-1">實體翼展光儲充智慧一體化貨櫃屋展示</p>
+            </div>
           </div>
         </div>
       </section>
@@ -103,7 +132,6 @@ export default function App() {
               </p>
             </div>
           </div>
-          {/* 已修復防拒連：YouTube Shorts 專用垂直影片容器 */}
           <div className="flex justify-center w-full">
             <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
               <iframe
@@ -209,7 +237,7 @@ export default function App() {
               <button onClick={handlePdfExport} className="w-full bg-green-500 text-black py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:bg-green-400 transition-transform active:scale-98 text-sm sm:text-base">
                 產生專屬報價 PDF
               </button>
-              {/* 優化直接連接 LINE 功能 */}
+              {/* 已精準對接 LINE 官方帳號按鈕 */}
               <a href={lineUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center border border-zinc-700 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:bg-zinc-800 transition-colors text-sm sm:text-base font-semibold text-zinc-200 active:scale-98">
                 加入 LINE 顧問
               </a>
@@ -229,7 +257,6 @@ export default function App() {
               <p className="text-green-400 font-semibold">佈局規劃：新型專利、發明專利與外觀設計專利。</p>
             </div>
           </div>
-          {/* 技術架構占位圖 */}
           <div className="relative aspect-video rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-800 bg-gradient-to-bl from-zinc-900 via-black to-zinc-900 flex flex-col justify-center items-center p-6 text-center">
             <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
             <span className="text-4xl sm:text-5xl mb-3">📐</span>
@@ -244,7 +271,7 @@ export default function App() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8">可移動的能源型資產</h2>
           <p className="text-zinc-400 text-base sm:text-xl leading-relaxed mb-12 max-w-2xl mx-auto">
-            不只是貨櫃屋。而是全面結合綠能發電、分散式儲能、智慧能源調節與高資產回報率的全新 ESG 綠能住宅平台。
+            不只是貨櫃屋。而是全面結合綠能發電、分散式儲能、智慧能源調節與高資產回報率的全新 ESG 綠能住宅 platform。
           </p>
           <div className="grid sm:grid-cols-3 gap-4 sm:gap-8 mt-12 sm:mt-16">
             <div className="bg-zinc-900/30 border border-zinc-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8">
