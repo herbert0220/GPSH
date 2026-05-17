@@ -12,19 +12,19 @@ export default function App() {
       name: '20呎｜入門款',
       desc: '適合個人居住、工地宿舍與臨時辦公空間',
       size: '20ft',
-      price: 'NT$ 350,000 起',
+      price: 'NT$ 320,000 起',
     },
     {
       name: '30呎｜主力款',
       desc: '民宿與小家庭最佳配置',
       size: '30ft',
-      price: 'NT$ 680,000 起',
+      price: 'NT$ 480,000 起',
     },
     {
       name: '40呎｜投資款',
       desc: '三房雙衛、高報酬收租型產品',
       size: '40ft',
-      price: 'NT$ 1,280,000 起',
+      price: 'NT$ 680,000 起',
     },
   ]
 
@@ -52,7 +52,7 @@ export default function App() {
      STATE
   ========================== */
 
-  const basePrice = 350000
+  const basePrice = 320000
   const [selectedOptions, setSelectedOptions] = useState({})
 
   const lineUrl = 'https://lin.ee/uNjqsw8'
@@ -279,7 +279,7 @@ NT$ ${totalPrice.toLocaleString()}
 
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ"
+              src="https://youtube.com/shorts/rc2IO7ueJhU?si=Y4Ihlv6dXDiiVJGD"
               title="GPSH SMART HOUSE"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
