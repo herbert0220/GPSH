@@ -1,4 +1,3 @@
-```jsx
 import { useState } from 'react'
 import './index.css'
 
@@ -30,14 +29,12 @@ export default function App() {
   ]
 
   const features = [
-    '翼展式可擴充結構',
-    '碳鋼方柱高強度骨架',
-    '太陽能整合系統',
-    '智慧能源控制',
-    '離網供電能力',
-    '快速部署',
-    '模組化量產',
-    'ESG綠能住宅',
+    { title: '翼展式結構', desc: '專利折疊展開設計，運輸體積小，現場空間倍增。' },
+    { title: '碳鋼方柱骨架', desc: '高強度結構鋼，抗風耐震，符合安全法規。' },
+    { title: '太陽能整合', desc: '車頂全包覆式光電板，自主發電，節能減碳。' },
+    { title: '智慧能源控制', desc: 'AI 自動調配市電與電池輸出，優化負載管理。' },
+    { title: '離網供電能力', desc: '配備大容量儲能系統，無市電地區亦能正常運作。' },
+    { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
   const optionList = [
@@ -132,7 +129,7 @@ NT$ ${totalPrice.toLocaleString()}
               投資方案
             </a>
 
-            <a href={lineUrl} target="_blank">
+            <a href={lineUrl} target="_blank" rel="noreferrer">
               <button className="bg-green-500 text-black px-5 py-2 rounded-xl font-bold hover:scale-105 transition">
                 LINE 顧問
               </button>
@@ -295,253 +292,155 @@ NT$ ${totalPrice.toLocaleString()}
 
       {/* ================= FEATURES ================= */}
 
-      <section className="max-w-7xl mx-auto px-6 py-24">
+      <section id="products" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
 
         <div className="mb-16 text-center">
-
           <h2 className="text-4xl font-black mb-4">
             核心技術
           </h2>
-
           <p className="text-zinc-500">
             模組化鋼構 × 太陽能 × 智能控制 × 可移動資產
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-          {features.map((feature, index) => (
-
-            <div
-              key={index}
-              className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 hover:border-green-500 transition"
-            >
-
-              <div className="text-4xl mb-5 text-green-500">
-                ⚡
+        {/* 修正原本被截斷的 className */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feat, idx) => (
+            <div key={idx} className="border border-zinc-800 bg-zinc-900/20 p-8 rounded-3xl hover:border-zinc-700 transition">
+              <div className="h-12 w-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-400 font-bold mb-6">
+                0{idx + 1}
               </div>
+              <h3 className="text-xl font-bold mb-3">{feat.title}</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed">{feat.desc}</p>
+            </div>
+          ))}
+        </div>
 
-              <h3 className="text-xl font-bold">
-                {feature}
-              </h3>
-
+        {/* 產品規格卡片 */}
+        <div className="grid lg:grid-cols-3 gap-8 mt-20">
+          {products.map((prod, idx) => (
+            <div key={idx} className="border border-zinc-800 bg-zinc-900/40 p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-mono bg-zinc-800 px-3 py-1 rounded-full text-zinc-400">{prod.size}</span>
+                <h3 className="text-2xl font-black mt-4 mb-2">{prod.name}</h3>
+                <p className="text-zinc-400 text-sm mb-6">{prod.desc}</p>
+              </div>
+              <div className="text-xl font-bold text-green-400 border-t border-zinc-800 pt-4 mt-4">
+                {prod.price}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ================= PRODUCTS ================= */}
+      {/* ================= CONFIGURATOR (客製配置) ================= */}
 
-      <section
-        id="products"
-        className="bg-zinc-950 border-y border-zinc-900"
-      >
-
-        <div className="max-w-7xl mx-auto px-6 py-24">
-
-          <div className="mb-16 text-center">
-
-            <h2 className="text-4xl font-black mb-4">
-              產品系列
-            </h2>
-
-            <p className="text-zinc-500">
-              模組化住宅 × 投資型資產 × 綠能系統
-            </p>
-
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-
-            {products.map((product, index) => (
-
-              <div
-                key={index}
-                className="bg-black border border-zinc-800 rounded-[32px] overflow-hidden hover:border-green-500 transition"
-              >
-
-                <div className="h-56 bg-gradient-to-br from-zinc-900 to-black flex items-center justify-center text-7xl">
-                  🏠
-                </div>
-
-                <div className="p-8">
-
-                  <h3 className="text-2xl font-black mb-3">
-                    {product.name}
-                  </h3>
-
-                  <p className="text-zinc-400 mb-6 leading-relaxed">
-                    {product.desc}
-                  </p>
-
-                  <div className="text-green-500 text-2xl font-black mb-8">
-                    {product.price}
-                  </div>
-
-                  <a
-                    href="#configurator"
-                    className="block text-center bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition"
-                  >
-                    查看配置
-                  </a>
-
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= CONFIGURATOR ================= */}
-
-      <section
-        id="configurator"
-        className="max-w-7xl mx-auto px-6 py-24"
-      >
-
-        <div className="mb-16 text-center">
-
-          <h2 className="text-4xl font-black mb-4">
-            即時客製配置
-          </h2>
-
-          <p className="text-zinc-500">
-            即時選配 × 即時報價 × LINE 成交
-          </p>
-
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-
-          {/* OPTIONS */}
-
-          <div className="bg-zinc-900/30 border border-zinc-800 rounded-[32px] p-8">
-
-            <h3 className="text-2xl font-black mb-8">
-              選配項目
-            </h3>
-
+      <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          
+          <div>
+            <h2 className="text-4xl font-black mb-4">預算即時試算</h2>
+            <p className="text-zinc-400 mb-8">依據您的場域需求與離網條件，勾選客製化配備，系統將即時產出報價底稿。</p>
+            
             <div className="space-y-4">
-
-              {optionList.map((option) => (
-
-                <label
-                  key={option.id}
-                  className={`flex items-center justify-between rounded-2xl border p-5 cursor-pointer transition ${
-                    selectedOptions[option.id]
-                      ? 'border-green-500 bg-green-500/10'
-                      : 'border-zinc-800 hover:border-zinc-700'
+              {optionList.map((opt) => (
+                <label 
+                  key={opt.id} 
+                  className={`flex items-center justify-between p-5 rounded-2xl border cursor-pointer select-none transition ${
+                    selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'
                   }`}
                 >
-
                   <div className="flex items-center gap-4">
-
-                    <input
-                      type="checkbox"
-                      checked={!!selectedOptions[option.id]}
-                      onChange={() => handleCheckboxChange(option.id)}
-                      className="w-5 h-5 accent-green-500"
+                    <input 
+                      type="checkbox" 
+                      checked={!!selectedOptions[opt.id]} 
+                      onChange={() => handleCheckboxChange(opt.id)}
+                      className="accent-green-500 w-5 h-5 rounded"
                     />
-
-                    <span className="font-semibold">
-                      {option.name}
-                    </span>
+                    <span className="font-medium text-sm">{opt.name}</span>
                   </div>
-
-                  <span className="text-green-400 font-mono">
-                    + NT$ {option.price.toLocaleString()}
-                  </span>
-
+                  <span className="text-zinc-400 text-sm">+ NT$ {opt.price.toLocaleString()}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* PRICE */}
-
-          <div className="bg-zinc-900/30 border border-zinc-800 rounded-[32px] p-8 flex flex-col justify-between">
-
-            <div>
-
-              <h3 className="text-2xl font-black mb-8">
-                即時報價
-              </h3>
-
-              <div className="space-y-4">
-
-                <div className="flex justify-between text-zinc-400">
-                  <span>基礎價格</span>
-                  <span>NT$ {basePrice.toLocaleString()}</span>
+          <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
+            <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
+            
+            <div className="space-y-3 text-sm text-zinc-400 min-h-[100px]">
+              <div className="flex justify-between text-white">
+                <span>20呎 入門款基礎結構</span>
+                <span>NT$ {basePrice.toLocaleString()}</span>
+              </div>
+              {optionList.filter(opt => selectedOptions[opt.id]).map(opt => (
+                <div key={opt.id} className="flex justify-between">
+                  <span>+ {opt.name}</span>
+                  <span>NT$ {opt.price.toLocaleString()}</span>
                 </div>
+              ))}
+            </div>
 
-                {optionList.map(
-                  (opt) =>
-                    selectedOptions[opt.id] && (
-                      <div
-                        key={opt.id}
-                        className="flex justify-between text-green-400"
-                      >
-                        <span>{opt.name}</span>
-                        <span>
-                          + NT$ {opt.price.toLocaleString()}
-                        </span>
-                      </div>
-                    )
-                )}
-
-                <div className="border-t border-zinc-800 pt-6 flex justify-between text-3xl font-black">
-
-                  <span>總價</span>
-
-                  <span className="text-green-500">
-                    NT$ {totalPrice.toLocaleString()}
-                  </span>
-
-                </div>
+            <div className="border-t border-zinc-800 pt-6 mt-6">
+              <div className="flex justify-between items-baseline mb-8">
+                <span className="text-zinc-400 text-sm">預估總價</span>
+                <span className="text-3xl font-black text-green-500">NT$ {totalPrice.toLocaleString()}</span>
+              </div>
+              
+              <div className="grid gap-4">
+                <button 
+                  onClick={handlePdfExport}
+                  className="w-full bg-white text-black py-4 rounded-xl font-bold hover:bg-zinc-200 transition"
+                >
+                  產出專屬報價
+                </button>
+                <a href={lineUrl} target="_blank" rel="noreferrer" className="w-full text-center">
+                  <button className="w-full border border-green-500/50 text-green-400 py-4 rounded-xl font-bold hover:bg-green-500/10 transition">
+                    與 LINE 顧問討論可行性
+                  </button>
+                </a>
               </div>
             </div>
+          </div>
 
-            <div className="space-y-4 mt-10">
+        </div>
+      </section>
 
-              <button
-                onClick={handlePdfExport}
-                className="w-full bg-green-500 text-black py-5 rounded-2xl font-black hover:scale-105 transition"
-              >
-                產生專屬報價 PDF
-              </button>
+      {/* ================= INVESTMENT (投資方案) ================= */}
 
-              <a
-                href={lineUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center border border-zinc-700 py-5 rounded-2xl hover:bg-zinc-800 transition"
-              >
-                加入 LINE 顧問
-              </a>
+      <section id="investment" className="max-w-7xl mx-auto px-6 py-24 text-center">
+        <h2 className="text-4xl font-black mb-4">ESG 綠能住宅投資方案</h2>
+        <p className="text-zinc-400 max-w-xl mx-auto mb-12">高流動性的移動資產，結合民宿經營與淨零碳排趨勢，打造兼具高投報率與環境友善的資產配置。</p>
+        
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
+          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
+            <h3 className="text-xl font-bold text-green-400 mb-2">鄉村輕旅民宿方案</h3>
+            <p className="text-zinc-500 text-sm mb-6">低土地整地成本，快速開張運營</p>
+            <ul className="space-y-3 text-zinc-300 text-sm">
+              <li>• 專人協助場域能源與離網規劃</li>
+              <li>• 支援快速撤點重組，折舊風險極低</li>
+              <li>• 結合智慧鎖與 AI 管理，節省人力營運成本</li>
+            </ul>
+          </div>
 
-            </div>
+          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
+            <h3 className="text-xl font-bold text-green-400 mb-2">企業 ESG 園區宿舍</h3>
+            <p className="text-zinc-500 text-sm mb-6">滿足企業減碳指標與綠電憑證需求</p>
+            <ul className="space-y-3 text-zinc-300 text-sm">
+              <li>• 自帶太陽能發電，符合綠色建築規範</li>
+              <li>• 工廠預製模組結構，可全數回收及異地重建</li>
+              <li>• 縮短專案開發週期 70% 以上</li>
+            </ul>
           </div>
         </div>
       </section>
 
       {/* ================= FOOTER ================= */}
 
-      <footer className="border-t border-zinc-900 py-12 text-center text-zinc-500">
-
-        <div className="text-xl font-black text-white mb-3">
-          GPSH SMART HOUSE
-        </div>
-
-        <p className="mb-2">
-          可展開式能源型智能移動住宅系統
-        </p>
-
-        <p className="text-sm">
-          © 2026 GPSH All Rights Reserved.
-        </p>
-
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
+        <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
       </footer>
+
     </div>
   )
 }
-```
