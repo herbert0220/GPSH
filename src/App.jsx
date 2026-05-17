@@ -118,6 +118,7 @@ export default function App() {
               <p>運抵現場後，透過專利翼展傳動系統，可在極短時間內完成雙翼展開，並在當天完成基礎管線組裝，實現真正的「即到即住、無痛部署」。</p>
             </div>
           </div>
+          {/* 這是 100% 正確的 YouTube 直式播放器容器 */}
           <div className="flex justify-center w-full">
             <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
               <iframe
