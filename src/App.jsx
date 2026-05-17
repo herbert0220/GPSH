@@ -86,6 +86,36 @@ export default function App() {
         </div>
       </section>
 
+      {/* VIDEO SECTION (新加入的工廠到安裝影片區塊) */}
+      <section className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-800">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="text-4xl font-bold mb-6">實境展示：<br /><span className="text-green-500">工廠製造到現場安裝</span></h2>
+            <div className="space-y-6 text-zinc-400 text-lg leading-relaxed">
+              <p>
+                我們的智慧屋全程於現代化高標準工廠進行模組化精密生產，出廠前通過嚴格的結構與氣密、防水測試。
+              </p>
+              <p>
+                運抵現場後，透過專利翼展傳動系統，可在極短時間內完成雙翼展開，並在當天完成基礎管線組裝，實現真正的「即到即住、無痛部署」。
+              </p>
+            </div>
+          </div>
+          {/* YouTube Shorts 專用垂直影片容器 */}
+          <div className="flex justify-center">
+            <div className="relative w-full max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src="https://youtube.com"
+                title="GPSH 工廠到安裝"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FEATURES */}
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="mb-16">
