@@ -11,9 +11,9 @@ export default function App() {
   ====================================== */
 
   const products = [
-    { id: '20ft', name: '20呎｜入門款', desc: '適合1-2個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 320000 },
-    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 600000 },
-    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 820000 },
+    { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
+    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 680000 },
+    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 1280000 },
   ]
 
   const features = [
@@ -25,32 +25,32 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
-  // 🛠️ 修正點：更換為不帶雜亂參數、百分之百絕對不會被網域阻擋的穩定高清圖片網址
+  // 高級智慧與系統功能加購列表 (使用穩定高清不帶複雜參數的圖片 URL)
   const optionList = [
-    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://unsplash.com' },
-    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://unsplash.com' },
-    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: 'https://unsplash.com' },
-    { id: 'solar', name: '太陽能系統', price: 220000, img: 'https://unsplash.com' },
-    { id: 'battery', name: '儲能電池', price: 180000, img: 'https://unsplash.com' },
-    { id: 'offgrid', name: '離網系統', price: 120000, img: 'https://unsplash.com' },
-    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: 'https://unsplash.com' },
-    { id: 'terrace', name: '露台', price: 50000, img: 'https://unsplash.com' },
+    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c' },
+    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14' },
+    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586' },
+    { id: 'solar', name: '太陽能系統', price: 220000, img: 'https://images.unsplash.com/photo-1509391366360-2e959784a276' },
+    { id: 'battery', name: '儲能電池', price: 180000, img: 'https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d' },
+    { id: 'offgrid', name: '離網系統', price: 120000, img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e' },
+    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f' },
+    { id: 'terrace', name: '露台', price: 50000, img: 'https://images.unsplash.com/photo-1531971515494-d0b98ec1b195' },
   ]
 
-  // 客製工藝選配明細庫（關聯動態產品尺寸）
+  // 核心細部建材規格資料庫
   const productOptions = {
     floorPlans: {
       '20ft': [
         { id: '20-p1', name: '20呎 開放式標準套房', price: 0 },
-        { id: '20-p2', name: '20呎 2房1廳1衛極簡風', price: 35000 }
+        { id: '20-p2', name: '20呎 一房一衛極簡風', price: 35000 }
       ],
       '30ft': [
-        { id: '30-p1', name: '30呎 2房1廳1衛-標準版', price: 0 },
-        { id: '30-p2', name: '30呎 3房單衛溫馨格局', price: 55000 }
+        { id: '30-p1', name: '30呎 一房一廳一衛標準版', price: 0 },
+        { id: '30-p2', name: '30呎 雙房單衛溫馨格局', price: 55000 }
       ],
       '40ft': [
-        { id: '40-p1', name: '40呎 2房2廳2衛-雅緻版', price: 0 },
-        { id: '40-p2', name: '40呎 4房2衛高回報收租型', price: 85000 }
+        { id: '40-p1', name: '40呎 兩房一廳雙衛雅緻版', price: 0 },
+        { id: '40-p2', name: '40呎 三房雙衛高回報收租型', price: 85000 }
       ]
     },
     entranceDoors: [
@@ -80,18 +80,19 @@ export default function App() {
      STATE MANAGEMENT (狀態與初始化管理)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products)
+  const [activeProduct, setActiveProduct] = useState(products[0]) // 正確初始化單一物件物件，防止白屏
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 格局與尺寸關聯的初始化狀態
+  // 關聯動態產品尺寸的佈局列表
   const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
-  const [selectedPlan, setSelectedPlan] = useState(currentFloorPlans || null)
-
-  const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors)
-  const [selectedWindow, setSelectedWindow] = useState(productOptions.windows)
-  const [selectedWall, setSelectedWall] = useState(productOptions.exteriorWalls)
-  const [selectedFloor, setSelectedFloor] = useState(productOptions.flooring)
-  const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets)
+  
+  // 初始化選取預設第一個元素，完全排除 undefined 讀取
+  const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
+  const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
+  const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
+  const [selectedWall, setSelectedWall] = useState(productOptions.exteriorWalls[0])
+  const [selectedFloor, setSelectedFloor] = useState(productOptions.flooring[0])
+  const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets[0])
 
   /* ====================================
      BUSINESS LOGIC & TOTAL PRICE (計算邏輯)
@@ -100,7 +101,7 @@ export default function App() {
   const handleProductChange = (prod) => {
     setActiveProduct(prod)
     const newPlans = productOptions.floorPlans[prod.id] || []
-    setSelectedPlan(newPlans || null)
+    setSelectedPlan(newPlans[0] || null) // 防止尺寸轉換時格局變數對不上崩潰
   }
 
   const handleCheckboxChange = (id) => {
@@ -129,11 +130,11 @@ GPSH 智慧翼展屋 專屬報價
 空間格局：${selectedPlan?.name || '未選'} (+NT$ ${planPrice.toLocaleString()})
 
 【建材工藝選配】
-大門款式：${selectedDoor?.name} (+NT$ ${(selectedDoor?.price || 0).toLocaleString()})
-窗戶款式：${selectedWindow?.name} (+NT$ ${(selectedWindow?.price || 0).toLocaleString()})
-外牆板材：${selectedWall?.name} (+NT$ ${(selectedWall?.price || 0).toLocaleString()})
-地板材料：${selectedFloor?.name} (+NT$ ${(selectedFloor?.price || 0).toLocaleString()})
-插座面板：${selectedSocket?.name} (+NT$ ${(selectedSocket?.price || 0).toLocaleString()})
+大門款式：${selectedDoor?.name || '未選'} (+NT$ ${(selectedDoor?.price || 0).toLocaleString()})
+窗戶款式：${selectedWindow?.name || '未選'} (+NT$ ${(selectedWindow?.price || 0).toLocaleString()})
+外牆板材：${selectedWall?.name || '未選'} (+NT$ ${(selectedWall?.price || 0).toLocaleString()})
+地板材料：${selectedFloor?.name || '未選'} (+NT$ ${(selectedFloor?.price || 0).toLocaleString()})
+插座面板：${selectedSocket?.name || '未選'} (+NT$ ${(selectedSocket?.price || 0).toLocaleString()})
 
 【智慧與系統升級】
 ${optionList.filter(o => selectedOptions[o.id]).map(o => `• ${o.name} (+NT$ ${o.price.toLocaleString()})`).join('\n') || '無額外系統加購'}
@@ -186,7 +187,6 @@ NT$ ${totalPrice.toLocaleString()} 元
           <div className="relative">
             <div className="absolute inset-0 blur-3xl bg-green-500/10" />
             <div className="relative rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl">
-              {/* 🛠️ 修正點：主視覺房屋更換為穩定高清 CDN 圖片 */}
               <img src="https://unsplash.com" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
             </div>
           </div>
@@ -200,7 +200,6 @@ NT$ ${totalPrice.toLocaleString()} 元
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
-          {/* 🛠️ 修正點：切換為 YouTube 官方專屬免 Cookie 安全內嵌網域，徹底解決拒絕連線破圖問題 */}
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
             <iframe 
               className="w-full h-full" 
@@ -357,13 +356,8 @@ NT$ ${totalPrice.toLocaleString()} 元
               <div className="grid sm:grid-cols-2 gap-4">
                 {optionList.map((opt) => (
                   <label key={opt.id} className={`flex flex-col rounded-2xl border overflow-hidden cursor-pointer select-none transition ${selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'}`}>
-                    {/* 🛠️ 修正點：卡片加入安全的背景容器，當圖片載入時與底色流暢混合，絕對不再出現裂開的破圖小圖標 */}
                     <div className="h-36 bg-zinc-950 relative flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={opt.img} 
-                        alt={opt.name} 
-                        className="w-full h-full object-cover opacity-60 transition duration-300 hover:scale-105" 
-                      />
+                      <img src={opt.img} alt={opt.name} className="w-full h-full object-cover opacity-60" />
                       <div className="absolute top-3 left-3">
                         <input type="checkbox" checked={!!selectedOptions[opt.id]} onChange={() => handleCheckboxChange(opt.id)} className="accent-green-500 w-5 h-5 rounded cursor-pointer" />
                       </div>
@@ -421,7 +415,7 @@ NT$ ${totalPrice.toLocaleString()} 元
 
       {/* INVESTMENT */}
       <section id="investment" className="max-w-7xl mx-auto px-6 py-24 text-center">
-        <h2 className="text-4xl font-black mb-4">ESG 綠能住宅投資方案</h2>
+        <h2 className="text-4xl font-black mb-4">ESG 綠能住宅 投資方案</h2>
         <p className="text-zinc-400 max-w-xl mx-auto mb-12">高流動性的移動資產，結合民宿經營與淨零碳排趨勢，打造兼具高投報率與環境友善的資產配置。</p>
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
           <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
