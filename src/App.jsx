@@ -25,7 +25,6 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
-  // 高級智慧與系統功能加購列表 (使用穩定高清線上圖庫 URL，不帶複雜參數)
   const optionList = [
     { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://unsplash.com' },
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://unsplash.com' },
@@ -37,7 +36,6 @@ export default function App() {
     { id: 'terrace', name: '露台', price: 50000, img: 'https://unsplash.com' },
   ]
 
-  // 核心細部建材規格資料庫
   const productOptions = {
     floorPlans: {
       '20ft': [
@@ -77,16 +75,16 @@ export default function App() {
   }
 
   /* ====================================
-     STATE MANAGEMENT (狀態管理 - 精準導向單一物件，徹底修復白屏)
+     STATE MANAGEMENT (修正：全數初始化為單一物件)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products[0]) // ✅ 修正：選定20呎物件，而非整組陣列
+  const [activeProduct, setActiveProduct] = useState(products[0]) // 預設選取 20呎 物件
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 動態獲取格局列表
-  const currentFloorPlans = productOptions.floorPlans[activeProduct?.id || '20ft'] || []
+  // 關聯動態產品尺寸的佈局列表
+  const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
   
-  // ✅ 修正：初始狀態全部精準對齊到具體物件，不傳入整組陣列，防止讀取屬性時崩潰
+  // 核心修復：狀態必須初始化為陣列中的「第一個物件」，不能直接塞入整個陣列！
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
   const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
   const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
@@ -101,7 +99,7 @@ export default function App() {
   const handleProductChange = (prod) => {
     setActiveProduct(prod)
     const newPlans = productOptions.floorPlans[prod.id] || []
-    setSelectedPlan(newPlans[0] || null) // 切換尺寸時，格局防呆重置到該尺寸第一個
+    setSelectedPlan(newPlans[0] || null) // 尺寸切換時，自動歸位至該尺寸預設第一個格局
   }
 
   const handleCheckboxChange = (id) => {
@@ -126,7 +124,7 @@ export default function App() {
 GPSH 智慧翼展屋 專屬報價
 ----------------------------
 【基本房屋主機】
-主機型號：${activeProduct?.name || '未選'} (NT$ ${basePrice.toLocaleString()})
+主機型號：${activeProduct?.name} (NT$ ${basePrice.toLocaleString()})
 空間格局：${selectedPlan?.name || '未選'} (+NT$ ${planPrice.toLocaleString()})
 
 【建材工藝選配】
@@ -200,9 +198,10 @@ NT$ ${totalPrice.toLocaleString()} 元
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
+          {/* YouTube 官方安全無 Cookie 播放框架，修復安全性阻擋問題 */}
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
             <iframe 
-              className="w-full h-full" 
+              className="w-full h-full absolute inset-0" 
               src="https://youtube-nocookie.com" 
               title="GPSH Video" 
               frameBorder="0" 
@@ -241,7 +240,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                 key={prod.id}
                 onClick={() => handleProductChange(prod)}
                 className={`p-6 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
-                  activeProduct?.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-700'
+                  activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-700'
                 }`}
               >
                 <div>
@@ -373,12 +372,12 @@ NT$ ${totalPrice.toLocaleString()} 元
 
           </div>
 
-          {/* 右側：動態試算配備摘要卡片 */}
+          /* 右側：動態試算配備摘要卡片 */
           <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
             <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
             <div className="space-y-3 text-xs text-zinc-400 min-h-[120px]">
               <div className="flex justify-between text-white font-medium">
-                <span>{activeProduct?.name || '20呎｜入門款'} 基礎結構</span>
+                <span>{activeProduct?.name} 基礎結構</span>
                 <span>NT$ {basePrice.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
