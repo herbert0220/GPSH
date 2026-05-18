@@ -3,11 +3,11 @@ import './index.css'
 
 export default function App() {
 
-  // LINE 官方顧問連結
+  // ✅ 經精確確認之唯一正確 LINE 官方顧問連結
   const lineUrl = 'https://lin.ee/uNjqsw8'
 
   /* ====================================
-     DATA DEFINITIONS (完整產品與選配資料庫)
+     1. DATA DEFINITIONS (完整產品與選配資料庫)
   ====================================== */
 
   const products = [
@@ -75,16 +75,14 @@ export default function App() {
   }
 
   /* ====================================
-     STATE MANAGEMENT (修正：全數初始化為單一物件)
+     2. STATE MANAGEMENT (狀態管理 - 精確初始化)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products[0]) // 預設選取 20呎 物件
+  const [activeProduct, setActiveProduct] = useState(products[0]) 
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 關聯動態產品尺寸的佈局列表
   const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
   
-  // 核心修復：狀態必須初始化為陣列中的「第一個物件」，不能直接塞入整個陣列！
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
   const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
   const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
@@ -93,13 +91,13 @@ export default function App() {
   const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets[0])
 
   /* ====================================
-     BUSINESS LOGIC & TOTAL PRICE (計算邏輯)
+     3. BUSINESS LOGIC & CALCULATIONS (計算邏輯)
   ====================================== */
 
   const handleProductChange = (prod) => {
     setActiveProduct(prod)
     const newPlans = productOptions.floorPlans[prod.id] || []
-    setSelectedPlan(newPlans[0] || null) // 尺寸切換時，自動歸位至該尺寸預設第一個格局
+    setSelectedPlan(newPlans[0] || null)
   }
 
   const handleCheckboxChange = (id) => {
@@ -147,7 +145,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     JSX RENDERING (網頁外觀結構)
+     4. JSX RENDERING (網頁外觀佈局與防破圖機制)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
@@ -198,12 +196,11 @@ NT$ ${totalPrice.toLocaleString()} 元
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
-          {/* YouTube 官方安全無 Cookie 播放框架，修復安全性阻擋問題 */}
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
             <iframe 
               className="w-full h-full absolute inset-0" 
               src="https://youtube-nocookie.com" 
-              title="GPSH Video" 
+              title="GPSH Video Player" 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen 
@@ -212,7 +209,7 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-      {/* FEATURES & CARDS */}
+      {/* FEATURES */}
       <section id="products" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {features.map((feat, idx) => (
@@ -227,7 +224,7 @@ NT$ ${totalPrice.toLocaleString()} 元
       {/* ================= CONFIGURATOR (客製配置器) ================= */}
       <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
         
-        {/* Step 1: 選擇主機規格尺寸 */}
+        {/* Step 1: 選擇規格 */}
         <div className="mb-16">
           <h2 className="text-3xl font-black mb-2 flex items-center text-green-400">
             <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">1</span>
@@ -253,11 +250,11 @@ NT$ ${totalPrice.toLocaleString()} 元
           </div>
         </div>
 
-        {/* 混合佈局區群組 */}
+        {/* 雙欄主客製化介面 */}
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12">
             
-            {/* Step 2: 客製細部建材與結構格局 */}
+            {/* Step 2: 客製細部建材 */}
             <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8 space-y-6">
               <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
                 <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">2</span>
@@ -345,7 +342,7 @@ NT$ ${totalPrice.toLocaleString()} 元
               </div>
             </div>
 
-            {/* Step 3: 高級智慧與系統功能加購 */}
+            {/* Step 3: 智慧加購項目 */}
             <div>
               <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
                 <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">3</span>
@@ -372,7 +369,7 @@ NT$ ${totalPrice.toLocaleString()} 元
 
           </div>
 
-          /* 右側：動態試算配備摘要卡片 */
+          {/* 右側明細摘要固定面板 */}
           <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
             <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
             <div className="space-y-3 text-xs text-zinc-400 min-h-[120px]">
