@@ -4,7 +4,7 @@ import './index.css'
 export default function App() {
 
   // LINE 官方顧問連結
-  const lineUrl = 'https://lin.ee'
+  const lineUrl = 'https://lin.ee/uNjqsw8'
 
   /* ====================================
      DATA DEFINITIONS (完整產品與選配資料庫)
