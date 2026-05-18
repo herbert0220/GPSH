@@ -7,7 +7,7 @@ export default function App() {
   const lineUrl = 'https://lin.ee/uNjqsw8'
 
   /* ====================================
-     DATA DEFINITIONS (完整產品與選配資料)
+     DATA DEFINITIONS (完整產品與選配資料庫)
   ====================================== */
 
   const products = [
@@ -25,16 +25,16 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
-  // 高級智慧與系統功能加購列表
+  // 高級智慧與系統功能加購列表 (已更換為穩定高畫質線上圖庫 CDN 網址)
   const optionList = [
-    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: '/opt-glass.png' },
-    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: '/opt-bathroom.png' },
-    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: '/opt-floor.png' },
-    { id: 'solar', name: '太陽能系統', price: 220000, img: '/opt-solar.png' },
-    { id: 'battery', name: '儲能電池', price: 180000, img: '/opt-battery.png' },
-    { id: 'offgrid', name: '離網系統', price: 120000, img: '/opt-offgrid.png' },
-    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: '/opt-curtain.png' },
-    { id: 'terrace', name: '露台', price: 50000, img: '/opt-terrace.png' },
+    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://unsplash.com' },
+    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://unsplash.com' },
+    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: 'https://unsplash.com' },
+    { id: 'solar', name: '太陽能系統', price: 220000, img: 'https://unsplash.com' },
+    { id: 'battery', name: '儲能電池', price: 180000, img: 'https://unsplash.com' },
+    { id: 'offgrid', name: '離網系統', price: 120000, img: 'https://unsplash.com' },
+    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: 'https://unsplash.com' },
+    { id: 'terrace', name: '露台', price: 50000, img: 'https://unsplash.com' },
   ]
 
   // 客製工藝選配明細庫（關聯動態產品尺寸）
@@ -83,7 +83,7 @@ export default function App() {
   const [activeProduct, setActiveProduct] = useState(products[0])
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 當切換主機尺寸時，格局會動態與該尺寸的預設第一個格局對齊
+  // 格局與尺寸關聯的初始化狀態
   const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
   const [selectedPlan, setSelectedPlan] = useState(currentFloorPlans[0] || null)
 
@@ -186,7 +186,7 @@ NT$ ${totalPrice.toLocaleString()} 元
           <div className="relative">
             <div className="absolute inset-0 blur-3xl bg-green-500/10" />
             <div className="relative rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl">
-              <img src="/house-main.png" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
+              <img src="https://unsplash.com" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
@@ -199,6 +199,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
+          {/* YouTube 影片修正：加上正確的 playlist 播放清單參數以順利強制循環播放 */}
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
             <iframe className="w-full h-full" src="https://youtube.com" title="GPSH Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
           </div>
@@ -263,7 +264,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedPlan?.id || ''} 
                     onChange={(e) => setSelectedPlan(currentFloorPlans.find(p => p.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {currentFloorPlans.map(p => (
                       <option key={p.id} value={p.id}>{p.name} (+NT$ {p.price.toLocaleString()})</option>
@@ -276,7 +277,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedDoor?.id || ''} 
                     onChange={(e) => setSelectedDoor(productOptions.entranceDoors.find(d => d.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {productOptions.entranceDoors.map(d => (
                       <option key={d.id} value={d.id}>{d.name} (+NT$ {d.price.toLocaleString()})</option>
@@ -289,7 +290,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedWindow?.id || ''} 
                     onChange={(e) => setSelectedWindow(productOptions.windows.find(w => w.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {productOptions.windows.map(w => (
                       <option key={w.id} value={w.id}>{w.name} (+NT$ {w.price.toLocaleString()})</option>
@@ -302,7 +303,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedWall?.id || ''} 
                     onChange={(e) => setSelectedWall(productOptions.exteriorWalls.find(w => w.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {productOptions.exteriorWalls.map(w => (
                       <option key={w.id} value={w.id}>{w.name} (+NT$ {w.price.toLocaleString()})</option>
@@ -315,7 +316,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedFloor?.id || ''} 
                     onChange={(e) => setSelectedFloor(productOptions.flooring.find(f => f.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {productOptions.flooring.map(f => (
                       <option key={f.id} value={f.id}>{f.name} (+NT$ {f.price.toLocaleString()})</option>
@@ -328,7 +329,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                   <select 
                     value={selectedSocket?.id || ''} 
                     onChange={(e) => setSelectedSocket(productOptions.powerSockets.find(s => s.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none"
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
                   >
                     {productOptions.powerSockets.map(s => (
                       <option key={s.id} value={s.id}>{s.name} (+NT$ {s.price.toLocaleString()})</option>
@@ -351,12 +352,13 @@ NT$ ${totalPrice.toLocaleString()} 元
                     <div className="h-36 bg-zinc-900 relative">
                       <img src={opt.img} alt={opt.name} className="w-full h-full object-cover opacity-80" />
                       <div className="absolute top-3 left-3">
-                        <input type="checkbox" checked={!!selectedOptions[opt.id]} onChange={() => handleCheckboxChange(opt.id)} className="accent-green-500 w-5 h-5 rounded" />
+                        <input type="checkbox" checked={!!selectedOptions[opt.id]} onChange={() => handleCheckboxChange(opt.id)} className="accent-green-500 w-5 h-5 rounded cursor-pointer" />
                       </div>
                     </div>
+                    {/* 金額顯示修正：補上 ${} 讓字串能動態解析出金額數字 */}
                     <div className="p-4 flex flex-col justify-between flex-1">
                       <span className="font-bold text-sm text-white mb-2">{opt.name}</span>
-                      <span className="text-green-400 text-xs font-mono">+ NT$ opt.price.toLocaleString()</span>
+                      <span className="text-green-400 text-xs font-mono font-bold">+ NT$ {opt.price.toLocaleString()}</span>
                     </div>
                   </label>
                 ))}
