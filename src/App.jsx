@@ -360,7 +360,7 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-      {/* ================= CONFIGURATOR (客製配置器) ================= */}
+           {/* ================= CONFIGURATOR (客製配置器) ================= */}
       <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
         
         {/* Step 1: 選擇主機規格尺寸 */}
@@ -374,7 +374,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             {products.map((prod) => (
               <div 
                 key={prod.id}
-                onClick={() => handleProductChange(prod)}
+                onClick={() => setActiveProduct(prod)}
                 className={`p-6 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
                   activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-700'
                 }`}
@@ -390,6 +390,91 @@ NT$ ${totalPrice.toLocaleString()} 元
             ))}
           </div>
         </div>
+
+        {/* Step 2: 選擇配備項目 與 右側摘要 */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <h2 className="text-3xl font-black mb-2 flex items-center text-green-400">
+              <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">2</span>
+              勾選客製升級配備
+            </h2>
+            <p className="text-zinc-400 mb-8">可複選。升級項目皆隨車出廠與模組化安裝。</p>
+            
+            <div className="grid sm:grid-cols-2 gap-4">
+              {optionList.map((opt) => (
+                <label 
+                  key={opt.id} 
+                  className={`flex flex-col rounded-2xl border overflow-hidden cursor-pointer select-none transition ${
+                    selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'
+                  }`}
+                >
+                  {/* 已移除 onError 阻擋編譯的錯誤語法 */}
+                  <div className="h-32 bg-zinc-900 relative">
+                    <img 
+                      src={opt.img} 
+                      alt={opt.name} 
+                      className="w-full h-full object-cover opacity-80"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <input 
+                        type="checkbox" 
+                        checked={!!selectedOptions[opt.id]} 
+                        onChange={() => handleCheckboxChange(opt.id)}
+                        className="accent-green-500 w-5 h-5 rounded"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-4 flex flex-col justify-between flex-1">
+                    <span className="font-bold text-sm text-white mb-2">{opt.name}</span>
+                    <span className="text-green-400 text-xs font-mono">+ NT$ {opt.price.toLocaleString()}</span>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* 右側：計算報價單 */}
+          <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
+            <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
+            
+            <div className="space-y-3 text-sm text-zinc-400 min-h-[100px]">
+              <div className="flex justify-between text-white font-medium">
+                <span>{activeProduct.name} 基礎結構</span>
+                <span>NT$ {basePrice.toLocaleString()}</span>
+              </div>
+              
+              {optionList.filter(opt => selectedOptions[opt.id]).map(opt => (
+                <div key={opt.id} className="flex justify-between text-zinc-400">
+                  <span>+ {opt.name}</span>
+                  <span>NT$ {opt.price.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-zinc-800 pt-6 mt-6">
+              <div className="flex justify-between items-baseline mb-8">
+                <span className="text-zinc-400 text-sm">預估總價</span>
+                <span className="text-3xl font-black text-green-500">NT$ {totalPrice.toLocaleString()}</span>
+              </div>
+              
+              <div className="grid gap-4">
+                <button 
+                  onClick={handlePdfExport}
+                  className="w-full bg-white text-black py-4 rounded-xl font-bold hover:bg-zinc-200 transition"
+                >
+                  產出專屬報價
+                </button>
+                <a href={lineUrl} target="_blank" rel="noreferrer" className="w-full text-center">
+                  <button className="w-full border border-green-500/50 text-green-400 py-4 rounded-xl font-bold hover:bg-green-500/10 transition">
+                    與 LINE 顧問討論可行性
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
         {/* Step 2 + Step 3 混合佈局區 */}
         <div className="grid lg:grid-cols-3 gap-12 items-start">
