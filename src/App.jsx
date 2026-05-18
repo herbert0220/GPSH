@@ -53,13 +53,17 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
-  /* ====================================
-     PDF 擴充建材細節選項 (單選結構)
-  ====================================== */
-  const productOptions = {
-    // 室內間隔佈局 (依主機型進行連動)
-    floorPlans: {
-      '10ft': [{ id: 'plan-10-open', name: '大通間佈局', price: 0 }],
+    /* =========================
+     STATE (狀態管理)
+  ========================== */
+
+  // 修正：加上 [0] 預設選取第一個產品（20呎）
+  const [activeProduct, setActiveProduct] = useState(products[0]) 
+  const [selectedOptions, setSelectedOptions] = useState({})
+
+  // 已補上您的 LINE 官方帳號連結
+  const lineUrl = 'https://lin.ee/uNjqsw8'
+
       '20ft': [
         { id: 'plan-20-open', name: '大通間佈局', price: 0 },
         { id: 'plan-20-1b1k', name: '一室一廚一衛佈局', price: 30000 },
