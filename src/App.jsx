@@ -25,6 +25,7 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
+  // 高級智慧與系統功能加購列表 (使用高清線上圖庫 CDN)
   const optionList = [
     { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://unsplash.com' },
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://unsplash.com' },
@@ -36,6 +37,7 @@ export default function App() {
     { id: 'terrace', name: '露台', price: 50000, img: 'https://unsplash.com' },
   ]
 
+  // 客製工藝細部資料庫
   const productOptions = {
     floorPlans: {
       '20ft': [
@@ -75,14 +77,17 @@ export default function App() {
   }
 
   /* ====================================
-     2. STATE MANAGEMENT (狀態管理 - 精確初始化)
+     2. STATE MANAGEMENT (狀態管理 - ✅ 終極修復對齊單一物件)
   ====================================== */
 
+  // 初始化必須指向陣列中的單一特定物件（加上 [0]），完全防止 undefined 引發白屏
   const [activeProduct, setActiveProduct] = useState(products[0]) 
   const [selectedOptions, setSelectedOptions] = useState({})
 
+  // 根據當前選擇的主機規格尺寸，撈出動態格局列表
   const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
   
+  // 核心修正點：建材與格局狀態全數指向資料物件的第一項 [0]，徹底終結 runtime 錯誤
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
   const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
   const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
@@ -97,13 +102,14 @@ export default function App() {
   const handleProductChange = (prod) => {
     setActiveProduct(prod)
     const newPlans = productOptions.floorPlans[prod.id] || []
-    setSelectedPlan(newPlans[0] || null)
+    setSelectedPlan(newPlans[0] || null) // 尺寸切換時自動防呆切換至新尺寸的第一個格局物件
   }
 
   const handleCheckboxChange = (id) => {
     setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
+  // 預算動態加總核心
   const basePrice = activeProduct?.price || 0
   const planPrice = selectedPlan?.price || 0
   const materialPrice = 
@@ -145,7 +151,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     4. JSX RENDERING (網頁外觀佈局與防破圖機制)
+     4. JSX RENDERING (網頁前端渲染與防破圖外殼)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
