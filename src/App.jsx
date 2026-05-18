@@ -311,7 +311,7 @@ NT$ ${totalPrice.toLocaleString()} 元
           <div className="relative aspect-video rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl">
             <iframe
               className="w-full h-full"
-              src="https://youtube.com"
+              src="https://youtube.com/shorts/rc2IO7ueJhU?si=63YhqiuJpbNbOaP9"
               title="GPSH SMART HOUSE"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
