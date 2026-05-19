@@ -34,7 +34,7 @@ export default function App() {
     { id: 'battery', name: '斜屋頂', price: 150000, img: '/opt-battery.png' }, 
     { id: 'offgrid', name: '露臺', price: 80000, img: '/opt-offgrid.png' }, 
     { id: 'curtain', name: '石墨稀保溫地板', price: 95000, img: '/opt-curtain.png' }, 
-    { id: 'terrace', name: '露台', price: 50000, img: '/opt-terrace.png' },
+    { id: 'terrace', name: '框架選色', price: 20000, img: '/opt-terrace.png' },
   ]
 
   // ✅ 完全對齊截圖要求：包含大門、窗戶、外牆、地板、開關插座所有獨立實體圖檔路徑明細
