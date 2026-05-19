@@ -33,7 +33,7 @@ export default function App() {
     { id: 'solar', name: '太陽能離網10度儲能系統', price: 350000, img: '/opt-solar.png' }, 
     { id: 'battery', name: '斜屋頂', price: 150000, img: '/opt-battery.png' }, 
     { id: 'offgrid', name: '露臺', price: 80000, img: '/opt-offgrid.png' }, 
-    { id: 'curtain', name: '多層保溫隔熱板', price: 95000, img: '/opt-curtain.png' }, 
+    { id: 'curtain', name: '石墨稀保溫地板', price: 95000, img: '/opt-curtain.png' }, 
     { id: 'terrace', name: '露台', price: 50000, img: '/opt-terrace.png' },
   ]
 
