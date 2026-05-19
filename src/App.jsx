@@ -37,7 +37,7 @@ export default function App() {
     { id: 'terrace', name: '框架選色', price: 20000, img: '/opt-terrace.png' },
   ]
 
-  // ✅ 完全對齊截圖要求：包含大門、窗戶、外牆、地板、開關插座所有獨立實體圖檔路徑明細
+   // ✅ 完全對齊第二張截圖：格局規劃資料庫
   const productOptions = {
     floorPlans: {
       '20ft': [
@@ -59,31 +59,33 @@ export default function App() {
       { id: 'd3', name: '斷橋鋁極窄邊框鋼化大門', price: 28000, img: '/door-d3.png' }
     ],
     windows: [
-      { id: 'w1', name: '雙層中空鋼化隔音窗', price: 0, img: '/windows-d1.png' },
-      { id: 'w2', name: '防噪防颱三層夾膠玻璃窗', price: 25000, img: '/windows-d2.png' }
+      { id: 'w1', name: '雙層中空鋼化隔音窗', price: 0 },
+      { id: 'w2', name: '防噪防颱三層夾膠玻璃窗', price: 25000 }
     ],
     exteriorWalls: [
-      { id: 'wl1', name: '高密度聚氨酯保溫外牆板', price: 0, img: '/exteriorWalls-d1.png' },
-      { id: 'wl2', name: '金屬雕花氟碳漆裝飾板', price: 32000, img: '/exteriorWalls-d2.png' }
+      { id: 'wl1', name: '高密度聚氨酯保溫外牆板', price: 0 },
+      { id: 'wl2', name: '金屬雕花氟碳漆裝飾板', price: 32000 }
     ],
     flooring: [
-      { id: 'f1', name: 'SPC 鎖扣防水石塑地板', price: 0, img: '/flooring-d1.png' },
-      { id: 'f2', name: '原木多層實木複合地板', price: 22000, img: '/flooring-d2.png' }
+      { id: 'f1', name: 'SPC 鎖扣防水石塑地板', price: 0 },
+      { id: 'f2', name: '原木多層實木複合地板', price: 22000 }
     ],
     powerSockets: [
-      { id: 's1', name: '標準安全配電與鋼琴烤漆面板', price: 0, img: '/powerSockets-d1.png' },
-      { id: 's2', name: '高配防過載迴路與金屬拉絲面板', price: 12000, img: '/powerSockets-d2.png' }
+      { id: 's1', name: '標準安全配電與鋼琴烤漆面板', price: 0 },
+      { id: 's2', name: '高配防過載迴路與金屬拉絲面板', price: 12000 }
     ]
   }
 
   /* ====================================
-     2. STATE MANAGEMENT (狀態初始化與關聯重設)
+     2. STATE MANAGEMENT (狀態管理 - 預設選取單一物件，完全排除白屏)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products[0]) 
+  const [activeProduct, setActiveProduct] = useState(products[0]) // 💡 正確初始化為20呎單一物件
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 下拉與大字卡的精確物件選擇初始化狀態
+  const currentFloorPlans = productOptions.floorPlans[activeProduct?.id] || []
+  
+  // 所有客製化項目精確初始化為資料庫的第一筆單一物件
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
   const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
   const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
@@ -91,29 +93,25 @@ export default function App() {
   const [selectedFloor, setSelectedFloor] = useState(productOptions.flooring[0])
   const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets[0])
 
-  const currentFloorPlans = productOptions.floorPlans[activeProduct?.id] || []
-
-  // 💡 防呆連動機制：當使用者切換 20 -> 30 -> 40 呎主機時，格局自動切換至該尺寸的第一筆，防範狀態錯亂
-  useEffect(() => {
-    const matchedPlans = productOptions.floorPlans[activeProduct.id] || []
-    if (matchedPlans.length > 0) {
-      setSelectedPlan(matchedPlans[0])
-    }
-  }, [activeProduct])
-
   /* ====================================
      3. BUSINESS LOGIC & MULTIPLIER (尺寸加乘算式核心)
   ====================================== */
+
+  const handleProductChange = (prod) => {
+    setActiveProduct(prod)
+    const newPlans = productOptions.floorPlans[prod.id] || []
+    setSelectedPlan(newPlans[0] || null) // 尺寸切換時，自動歸位至該尺寸第一個格局
+  }
 
   const handleCheckboxChange = (id) => {
     setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
-  // 計算選配與升級項目的尺寸倍率係數
+  // 💡 尺寸加乘倍率算式：30呎1.5倍、40呎2倍
   const getMultiplier = () => {
-    if (activeProduct?.id === '30ft') return 1.5
-    if (activeProduct?.id === '40ft') return 2
-    return 1
+    if (activeProduct?.id === '30ft') return 1.5; 
+    if (activeProduct?.id === '40ft') return 2;   
+    return 1; 
   }
 
   const basePrice = activeProduct?.price || 0
@@ -126,7 +124,7 @@ export default function App() {
     (selectedSocket?.price || 0)) * getMultiplier()
 
   const systemPrice = optionList.reduce((sum, opt) => {
-    const currentItemPrice = opt.price * getMultiplier()
+    const currentItemPrice = opt.price * getMultiplier();
     return sum + (selectedOptions[opt.id] ? currentItemPrice : 0)
   }, 0)
 
@@ -160,7 +158,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     4. JSX RENDERING (全自動控制響應排版)
+     4. JSX RENDERING (外觀佈局與防破圖機制)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
@@ -238,7 +236,7 @@ NT$ ${totalPrice.toLocaleString()} 元
       {/* ================= CONFIGURATOR (客製配置器) ================= */}
       <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
         
-        {/* Step 1: 選擇主機型 */}
+        {/* Step 1: 選擇規格 */}
         <div className="mb-16">
           <h2 className="text-3xl font-black mb-2 flex items-center text-green-400">
             <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">1</span>
@@ -249,7 +247,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             {products.map((prod) => (
               <div 
                 key={prod.id}
-                onClick={() => setActiveProduct(prod)}
+                onClick={() => handleProductChange(prod)}
                 className={`p-6 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
                   activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-700'
                 }`}
@@ -268,72 +266,103 @@ NT$ ${totalPrice.toLocaleString()} 元
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12">
             
-            {/* Step 2: 客製細部建材與結構格局 (升級為卡片式排列，並讀取獨立建材照片) */}
+            {/* Step 2: 客製細部建材 */}
             <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8 space-y-8">
               <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
                 <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">2</span>
                 客製細部建材與結構格局
               </h2>
-              
-              {/* 室內格局 */}
-              <div className="space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400">// 室內間隔佈局</label>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {currentFloorPlans.map(p => (
-                    <div key={p.id} onClick={() => setSelectedPlan(p)} className={`p-4 rounded-xl border cursor-pointer flex justify-between items-center transition ${selectedPlan?.id === p.id ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-black hover:border-zinc-700'}`}>
-                      <span className="text-sm font-bold">{p.name}</span>
-                      <span className="text-xs text-green-400 font-mono">+NT\$ {(p.price * getMultiplier()).toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* 大門款式選配區 (含對齊照片之大字卡渲染) */}
-              <div className="space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400">// 入戶大門門款選配 (帶圖片)</label>
-                <div className="grid sm:grid-cols-3 gap-4">
-                  {productOptions.entranceDoors.map(d => (
-                    <div key={d.id} onClick={() => setSelectedDoor(d)} className={`rounded-xl border overflow-hidden cursor-pointer bg-black transition flex flex-col ${selectedDoor?.id === d.id ? 'border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.1)]' : 'border-zinc-800 hover:border-zinc-700'}`}>
-                      <div className="h-24 bg-zinc-900 overflow-hidden relative">
+              {/* ✅ 大門選單：綁定正確的 onClick 事件，解決選取大門沒有反應的問題 */}
+              <div className="border-b border-zinc-800/80 pb-6">
+                <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3">🚪 入戶大門門款樣式選配</label>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  {productOptions.entranceDoors.map((d) => (
+                    <div 
+                      key={d.id}
+                      onClick={() => setSelectedDoor(d)}
+                      className={`border p-3 rounded-xl cursor-pointer transition flex flex-col justify-between overflow-hidden bg-black/40 ${
+                        selectedDoor?.id === d.id ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="h-24 w-full bg-zinc-900 rounded-lg overflow-hidden mb-2">
                         <img src={d.img} alt={d.name} className="w-full h-full object-cover opacity-80" />
                       </div>
-                      <div className="p-3 flex flex-col justify-between flex-1">
-                        <span className="text-xs font-bold text-zinc-200 line-clamp-1">{d.name}</span>
-                        <span className="text-[11px] text-green-400 font-mono mt-1">+NT\$ {(d.price * getMultiplier()).toLocaleString()}</span>
+                      <div>
+                        <div className="text-xs font-bold text-white line-clamp-1">{d.name}</div>
+                        <div className="text-[10px] text-green-400 mt-1 font-mono">+NT\$ {(d.price * getMultiplier()).toLocaleString()}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
+              
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">室內間隔佈局</label>
+                  <select 
+                    value={selectedPlan?.id || ''} 
+                    onChange={(e) => setSelectedPlan(currentFloorPlans.find(p => p.id === e.target.value) || null)}
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
+                  >
+                    {currentFloorPlans.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} (+NT\$ {(p.price * getMultiplier()).toLocaleString()})</option>
+                    ))}
+                  </select>
+                </div>
 
-              {/* 其餘細部工藝材料選擇列表 */}
-              <div className="grid sm:grid-cols-2 gap-6 border-t border-zinc-800/60 pt-6">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">窗戶款式選配</label>
-                  <select value={selectedWindow?.id || ''} onChange={(e) => setSelectedWindow(productOptions.windows.find(w => w.id === e.target.value) || null)} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer">
-                    {productOptions.windows.map(w => <option key={w.id} value={w.id}>{w.name} (+NT\$ {(w.price * getMultiplier()).toLocaleString()})</option>)}
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">防噪防颱窗戶款式</label>
+                  <select 
+                    value={selectedWindow?.id || ''} 
+                    onChange={(e) => setSelectedWindow(productOptions.windows.find(w => w.id === e.target.value) || null)}
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
+                  >
+                    {productOptions.windows.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} (+NT\$ {(w.price * getMultiplier()).toLocaleString()})</option>
+                    ))}
                   </select>
                 </div>
+
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">外牆板材選配</label>
-                  <select value={selectedWall?.id || ''} onChange={(e) => setSelectedWall(productOptions.exteriorWalls.find(w => w.id === e.target.value) || null)} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer">
-                    {productOptions.exteriorWalls.map(w => <option key={w.id} value={w.id}>{w.name} (+NT\$ {(w.price * getMultiplier()).toLocaleString()})</option>)}
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">外牆板材顏色與雕花板</label>
+                  <select 
+                    value={selectedWall?.id || ''} 
+                    onChange={(e) => setSelectedWall(productOptions.exteriorWalls.find(w => w.id === e.target.value) || null)}
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
+                  >
+                    {productOptions.exteriorWalls.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} (+NT\$ {(w.price * getMultiplier()).toLocaleString()})</option>
+                    ))}
                   </select>
                 </div>
+
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">地板材料選配</label>
-                  <select value={selectedFloor?.id || ''} onChange={(e) => setSelectedFloor(productOptions.flooring.find(f => f.id === e.target.value) || null)} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer">
-                    {productOptions.flooring.map(f => <option key={f.id} value={f.id}>{f.name} (+NT\$ {(f.price * getMultiplier()).toLocaleString()})</option>)}
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">室內防水防磨地面材料</label>
+                  <select 
+                    value={selectedFloor?.id || ''} 
+                    onChange={(e) => setSelectedFloor(productOptions.flooring.find(f => f.id === e.target.value) || null)}
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
+                  >
+                    {productOptions.flooring.map(f => (
+                      <option key={f.id} value={f.id}>{f.name} (+NT\$ {(f.price * getMultiplier()).toLocaleString()})</option>
+                    ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">插座面板選配</label>
-                  <select value={selectedSocket?.id || ''} onChange={(e) => setSelectedSocket(productOptions.powerSockets.find(s => s.id === e.target.value) || null)} className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer">
-                    {productOptions.powerSockets.map(s => <option key={s.id} value={s.id}>{s.name} (+NT\$ {(s.price * getMultiplier()).toLocaleString()})</option>)}
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">配電迴路與插座面板規格</label>
+                  <select 
+                    value={selectedSocket?.id || ''} 
+                    onChange={(e) => setSelectedSocket(productOptions.powerSockets.find(s => s.id === e.target.value) || null)}
+                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
+                  >
+                    {productOptions.powerSockets.map(s => (
+                      <option key={s.id} value={s.id}>{s.name} (+NT\$ {(s.price * getMultiplier()).toLocaleString()})</option>
+                    ))}
                   </select>
                 </div>
               </div>
-
             </div>
 
             {/* Step 3: 高級智慧系統功能加購 */}
@@ -410,4 +439,21 @@ NT$ ${totalPrice.toLocaleString()} 元
       {/* INVESTMENT */}
       <section id="investment" className="max-w-7xl mx-auto px-6 py-24 text-center">
         <h2 className="text-4xl font-black mb-4">ESG 綠能住宅 投資方案</h2>
-        <p className="text-zinc-400 max-w-xl mx-auto mb-12">高流動性的移動資產，結合民宿經營與淨零碳排趨
+        <p className="text-zinc-400 max-w-xl mx-auto mb-12">高流動性的移動資產，結合民宿經營與淨零碳排趨勢，打造兼具高投報率與環境友善的資產配置。</p>
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
+          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
+            <h3 className="text-xl font-bold text-green-400 mb-2">鄉村輕旅民宿方案</h3>
+            <p className="text-zinc-500 text-sm mb-6">低土地整地成本，快速開張運營</p>
+            <ul className="space-y-3 text-zinc-300 text-sm">
+              <li>• 專人協助場域能源與離網規劃</li>
+              <li>• 支援快速撤點重組，折舊風險極低</li>
+              <li>• 結合智慧鎖與 AI 管理，節省人力營運成本</li>
+            </ul>
+          </div>
+          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
+            <h3 className="text-xl font-bold text-green-400 mb-2">企業 ESG 園區宿舍</h3>
+            <p className="text-zinc-500 text-sm mb-6">滿足企業減碳指標與綠電憑證需求</p>
+            <ul className="space-y-3 text-zinc-300 text-sm">
+              <li>• 自帶太陽能發電，符合綠色建築規範</li>
+              <li>• 工廠預製模組結構，可全數回收及異地重建</li>
+              <li>• 縮短專案開發
