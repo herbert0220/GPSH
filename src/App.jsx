@@ -798,15 +798,9 @@ ${selectedSystems || '無'}
               <li>• 可回收重複利用</li>
 
             </ul>
-
           </div>
-
         </div>
-
       </section>
-
     </div>
-
   )
 }
-```
