@@ -1,450 +1,696 @@
-import { useState } from 'react'
+```jsx
+import { useMemo, useState } from 'react'
 import './index.css'
 
 export default function App() {
 
-  // ✅ 經精確確認之唯一正確 LINE 官方顧問連結
+  /* =========================================
+      DATA
+  ========================================= */
+
   const lineUrl = 'https://lin.ee/uNjqsw8'
 
-  /* ====================================
-     1. DATA DEFINITIONS (完整產品與選配資料庫)
-  ====================================== */
+  // ⚠️ 改成你的 YouTube 影片 ID
+  const youtubeId = 'dQw4w9WgXcQ'
+
+  const basePrice = 350000
 
   const products = [
-    { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
-    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 680000 },
-    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 1280000 },
+    {
+      title: '20呎｜入門款',
+      desc: '適合個人住宅、工地宿舍與臨時辦公空間',
+      price: 'NT$ 350,000 起',
+    },
+    {
+      title: '30呎｜主力款',
+      desc: '民宿與小家庭最佳配置',
+      price: 'NT$ 680,000 起',
+    },
+    {
+      title: '40呎｜投資款',
+      desc: '三房雙衛、高報酬收租型產品',
+      price: 'NT$ 1,280,000 起',
+    },
   ]
 
   const features = [
-    { title: '翼展式結構', desc: '專利折疊展開設計，運輸體積小，現場空間倍增。' },
-    { title: '碳鋼方柱骨架', desc: '高強度結構鋼，抗風耐震，符合安全法規。' },
-    { title: '太陽能整合', desc: '車頂全包覆式光電板，自主發電，節能減碳。' },
-    { title: '智慧能源控制', desc: 'AI 自動調配市電與電池輸出，優化負載管理。' },
-    { title: '離網供電能力', desc: '配備大容量儲能系統，無市電地區亦能正常運作。' },
-    { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
+    '翼展式可擴充結構',
+    '碳鋼方柱高強度骨架',
+    '太陽能整合系統',
+    '智慧能源控制',
+    '離網供電能力',
+    '快速部署',
+    '模組化量產',
+    'ESG綠能住宅',
   ]
 
-  // 高級智慧與系統功能加購列表 (使用高清線上圖庫 CDN)
-  const optionList = [
-    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: 'https://unsplash.com' },
-    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: 'https://unsplash.com' },
-    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: 'https://unsplash.com' },
-    { id: 'solar', name: '太陽能系統', price: 220000, img: 'https://unsplash.com' },
-    { id: 'battery', name: '儲能電池', price: 180000, img: 'https://unsplash.com' },
-    { id: 'offgrid', name: '離網系統', price: 120000, img: 'https://unsplash.com' },
-    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: 'https://unsplash.com' },
-    { id: 'terrace', name: '露台', price: 50000, img: 'https://unsplash.com' },
-  ]
-
-  // 客製工藝細部資料庫
-  const productOptions = {
-    floorPlans: {
-      '20ft': [
-        { id: '20-p1', name: '20呎 開放式標準套房', price: 0 },
-        { id: '20-p2', name: '20呎 一房一衛極簡風', price: 35000 }
-      ],
-      '30ft': [
-        { id: '30-p1', name: '30呎 一房一廳一衛標準版', price: 0 },
-        { id: '30-p2', name: '30呎 雙房單衛溫馨格局', price: 55000 }
-      ],
-      '40ft': [
-        { id: '40-p1', name: '40呎 兩房一廳雙衛雅緻版', price: 0 },
-        { id: '40-p2', name: '40呎 三房雙衛高回報收租型', price: 85000 }
-      ]
+  const options = [
+    {
+      id: 'solar',
+      name: '太陽能系統',
+      price: 220000,
     },
-    entranceDoors: [
-      { id: 'd1', name: '標準鋼製氟碳防盜門', price: 0 },
-      { id: 'd2', name: '智慧指紋密碼防盜門', price: 15000 },
-      { id: 'd3', name: '斷橋鋁極窄邊框鋼化大門', price: 28000 }
-    ],
-    windows: [
-      { id: 'w1', name: '雙層中空鋼化隔音窗', price: 0 },
-      { id: 'w2', name: '防噪防颱三層夾膠玻璃窗', price: 25000 }
-    ],
-    exteriorWalls: [
-      { id: 'wl1', name: '高密度聚氨酯保溫外牆板', price: 0 },
-      { id: 'wl2', name: '金屬雕花氟碳漆裝飾板', price: 32000 }
-    ],
-    flooring: [
-      { id: 'f1', name: 'SPC 鎖扣防水石塑地板', price: 0 },
-      { id: 'f2', name: '原木多層實木複合地板', price: 22000 }
-    ],
-    powerSockets: [
-      { id: 's1', name: '標準安全配電與鋼琴烤漆面板', price: 0 },
-      { id: 's2', name: '高配防過載迴路與金屬拉絲面板', price: 12000 }
-    ]
-  }
+    {
+      id: 'battery',
+      name: '儲能電池',
+      price: 180000,
+    },
+    {
+      id: 'offgrid',
+      name: '離網系統',
+      price: 120000,
+    },
+    {
+      id: 'glass',
+      name: '落地隔音玻璃',
+      price: 45000,
+    },
+    {
+      id: 'bathroom',
+      name: '乾濕分離浴室',
+      price: 65000,
+    },
+    {
+      id: 'terrace',
+      name: '戶外露台',
+      price: 50000,
+    },
+  ]
 
-  /* ====================================
-     2. STATE MANAGEMENT (狀態管理 - ✅ 終極修復對齊單一物件)
-  ====================================== */
+  /* =========================================
+      STATE
+  ========================================= */
 
-  // 初始化必須指向陣列中的單一特定物件（加上 [0]），完全防止 undefined 引發白屏
-  const [activeProduct, setActiveProduct] = useState(products[0]) 
   const [selectedOptions, setSelectedOptions] = useState({})
 
-  // 根據當前選擇的主機規格尺寸，撈出動態格局列表
-  const currentFloorPlans = productOptions.floorPlans[activeProduct.id] || []
-  
-  // 核心修正點：建材與格局狀態全數指向資料物件的第一項 [0]，徹底終結 runtime 錯誤
-  const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
-  const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
-  const [selectedWindow, setSelectedWindow] = useState(productOptions.windows[0])
-  const [selectedWall, setSelectedWall] = useState(productOptions.exteriorWalls[0])
-  const [selectedFloor, setSelectedFloor] = useState(productOptions.flooring[0])
-  const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets[0])
+  /* =========================================
+      FUNCTIONS
+  ========================================= */
 
-  /* ====================================
-     3. BUSINESS LOGIC & CALCULATIONS (計算邏輯)
-  ====================================== */
-
-  const handleProductChange = (prod) => {
-    setActiveProduct(prod)
-    const newPlans = productOptions.floorPlans[prod.id] || []
-    setSelectedPlan(newPlans[0] || null) // 尺寸切換時自動防呆切換至新尺寸的第一個格局物件
+  const toggleOption = (id) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
   }
 
-  const handleCheckboxChange = (id) => {
-    setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
+  const selectedList = useMemo(() => {
+    return options.filter((item) => selectedOptions[item.id])
+  }, [selectedOptions])
+
+  const totalPrice = useMemo(() => {
+    return selectedList.reduce(
+      (total, item) => total + item.price,
+      basePrice
+    )
+  }, [selectedList])
+
+  const handleExport = () => {
+
+    const selectedText =
+      selectedList.length > 0
+        ? selectedList.map((i) => `• ${i.name}`).join('\n')
+        : '無'
+
+    alert(`
+GPSH 翼展智能屋
+
+====================
+
+選配項目：
+
+${selectedText}
+
+====================
+
+總價：
+NT$ ${totalPrice.toLocaleString()}
+
+請截圖並聯繫 LINE 顧問取得正式報價。
+    `)
   }
 
-  // 預算動態加總核心
-  const basePrice = activeProduct?.price || 0
-  const planPrice = selectedPlan?.price || 0
-  const materialPrice = 
-    (selectedDoor?.price || 0) + 
-    (selectedWindow?.price || 0) + 
-    (selectedWall?.price || 0) + 
-    (selectedFloor?.price || 0) + 
-    (selectedSocket?.price || 0)
+  /* =========================================
+      JSX
+  ========================================= */
 
-  const systemPrice = optionList.reduce((sum, opt) => sum + (selectedOptions[opt.id] ? opt.price : 0), 0)
-
-  const totalPrice = basePrice + planPrice + materialPrice + systemPrice
-
-  const handlePdfExport = () => {
-    const content = `
-GPSH 智慧翼展屋 專屬報價
-----------------------------
-【基本房屋主機】
-主機型號：${activeProduct?.name} (NT$ ${basePrice.toLocaleString()})
-空間格局：${selectedPlan?.name || '未選'} (+NT$ ${planPrice.toLocaleString()})
-
-【建材工藝選配】
-大門款式：${selectedDoor?.name || '未選'} (+NT$ ${(selectedDoor?.price || 0).toLocaleString()})
-窗戶款式：${selectedWindow?.name || '未選'} (+NT$ ${(selectedWindow?.price || 0).toLocaleString()})
-外牆板材：${selectedWall?.name || '未選'} (+NT$ ${(selectedWall?.price || 0).toLocaleString()})
-地板材料：${selectedFloor?.name || '未選'} (+NT$ ${(selectedFloor?.price || 0).toLocaleString()})
-插座面板：${selectedSocket?.name || '未選'} (+NT$ ${(selectedSocket?.price || 0).toLocaleString()})
-
-【智慧與系統升級】
-${optionList.filter(o => selectedOptions[o.id]).map(o => `• ${o.name} (+NT$ ${o.price.toLocaleString()})`).join('\n') || '無額外系統加購'}
-
-----------------------------
-預估估算總價：
-NT$ ${totalPrice.toLocaleString()} 元
-
-請截圖此畫面或連繫下方 LINE 官方顧問取得正式報價合約。
-    `
-    alert(content)
-  }
-
-  /* ====================================
-     4. JSX RENDERING (網頁前端渲染與防破圖外殼)
-  ====================================== */
   return (
-    <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
+    <div className="bg-black text-white min-h-screen overflow-x-hidden">
 
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-black/70 border-b border-zinc-900">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      {/* =========================================
+          HEADER
+      ========================================= */}
+
+      <header className="sticky top-0 z-50 border-b border-zinc-800 bg-black/80 backdrop-blur-xl">
+
+        <div className="max-w-7xl mx-auto h-20 px-6 flex items-center justify-between">
+
           <div className="text-2xl font-black tracking-widest">
-            GPSH<span className="text-green-500 ml-2">SMART HOUSE</span>
+            GPSH
+            <span className="text-green-500 ml-2">
+              SMART HOUSE
+            </span>
           </div>
-          <div className="hidden md:flex gap-8 text-sm text-zinc-400 items-center">
-            <a href="#products" className="hover:text-white transition">產品技術</a>
-            <a href="#configurator" className="hover:text-white transition">客製配置</a>
-            <a href="#investment" className="hover:text-white transition">投資方案</a>
-            <a href={lineUrl} target="_blank" rel="noreferrer">
-              <button className="bg-green-500 text-black px-5 py-2 rounded-xl font-bold hover:scale-105 transition">LINE 顧問</button>
+
+          <nav className="hidden md:flex items-center gap-8">
+
+            <a
+              href="#products"
+              className="text-zinc-400 hover:text-white transition"
+            >
+              產品系列
             </a>
-          </div>
+
+            <a
+              href="#configurator"
+              className="text-zinc-400 hover:text-white transition"
+            >
+              客製配置
+            </a>
+
+            <a
+              href="#investment"
+              className="text-zinc-400 hover:text-white transition"
+            >
+              投資方案
+            </a>
+
+            <a
+              href={lineUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-500 text-black px-5 py-3 rounded-xl font-black hover:scale-105 transition"
+            >
+              LINE 顧問
+            </a>
+
+          </nav>
         </div>
       </header>
 
-      {/* HERO */}
+      {/* =========================================
+          HERO
+      ========================================= */}
+
       <section className="relative border-b border-zinc-900 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-green-950/10 via-black to-black" />
-        <div className="max-w-7xl mx-auto px-6 py-24 lg:py-36 grid lg:grid-cols-2 gap-20 items-center relative z-10">
+
+        <div className="absolute inset-0 bg-gradient-to-b from-green-950/20 via-black to-black" />
+
+        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-36 grid lg:grid-cols-2 gap-20 items-center">
+
+          {/* LEFT */}
+
           <div>
-            <div className="inline-flex items-center px-4 py-1 border border-green-500/30 rounded-full text-green-400 text-sm mb-8">EXPANDABLE SOLAR SMART HOUSE</div>
-            <h1 className="text-5xl lg:text-7xl font-black leading-tight mb-8">翼展太陽能<br /><span className="text-green-500">智能屋</span></h1>
-            <p className="text-zinc-400 text-lg leading-relaxed max-w-xl mb-10">可展開式能源型智能移動住宅系統，結合翼展結構、太陽能、儲能與 AI 智慧能源管理。</p>
+
+            <div className="inline-flex items-center border border-green-500/30 text-green-400 rounded-full px-4 py-1 text-sm mb-8">
+              EXPANDABLE SOLAR SMART HOUSE
+            </div>
+
+            <h1 className="text-5xl lg:text-7xl font-black leading-tight mb-8">
+
+              翼展太陽能
+              <br />
+
+              <span className="text-green-500">
+                智能屋
+              </span>
+
+            </h1>
+
+            <p className="text-zinc-400 text-lg leading-relaxed max-w-xl mb-10">
+
+              可展開式能源型智能移動住宅系統，
+              整合翼展結構、太陽能、儲能與智能能源控制。
+
+            </p>
+
             <div className="flex flex-wrap gap-4">
-              <a href="#configurator" className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">開始客製配置</a>
-              <a href="#investment" className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition">投資方案</a>
+
+              <a
+                href="#configurator"
+                className="bg-white text-black px-8 py-4 rounded-2xl font-black hover:scale-105 transition"
+              >
+                開始客製配置
+              </a>
+
+              <a
+                href="#video"
+                className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition"
+              >
+                查看展示影片
+              </a>
+
             </div>
+
+            {/* STATS */}
+
+            <div className="grid grid-cols-3 gap-4 mt-14">
+
+              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/30">
+                <div className="text-3xl font-black text-green-500">
+                  OFF
+                </div>
+                <div className="text-xs text-zinc-500 mt-1">
+                  GRID SYSTEM
+                </div>
+              </div>
+
+              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/30">
+                <div className="text-3xl font-black text-green-500">
+                  ESG
+                </div>
+                <div className="text-xs text-zinc-500 mt-1">
+                  GREEN ENERGY
+                </div>
+              </div>
+
+              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/30">
+                <div className="text-3xl font-black text-green-500">
+                  AI
+                </div>
+                <div className="text-xs text-zinc-500 mt-1">
+                  ENERGY CONTROL
+                </div>
+              </div>
+
+            </div>
+
           </div>
+
+          {/* RIGHT */}
+
           <div className="relative">
-            <div className="absolute inset-0 blur-3xl bg-green-500/10" />
+
+            <div className="absolute inset-0 bg-green-500/10 blur-3xl" />
+
             <div className="relative rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl">
-              <img src="https://unsplash.com" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
+
+              <img
+                src="/house-main.png"
+                alt="GPSH Smart House"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop'
+                }}
+              />
+
             </div>
           </div>
+
         </div>
       </section>
 
-      {/* SHORTS VIDEO CONTAINER */}
-      <section className="border-b border-zinc-900">
+      {/* =========================================
+          VIDEO
+      ========================================= */}
+
+      <section
+        id="video"
+        className="border-b border-zinc-900"
+      >
+
         <div className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
+
           <div>
-            <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
-            <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
+
+            <h2 className="text-4xl font-black mb-8">
+              工廠製造到現場部署
+            </h2>
+
+            <div className="space-y-6 text-zinc-400 leading-relaxed">
+
+              <p>
+                模組化工廠精密生產，
+                出廠前完成結構與電力測試。
+              </p>
+
+              <p>
+                現場快速展開部署，
+                可應用於住宅、民宿與離網能源系統。
+              </p>
+
+              <p>
+                採用碳鋼方柱骨架與專利翼展結構。
+              </p>
+
+            </div>
           </div>
-          <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
-            <iframe 
-              className="w-full h-full absolute inset-0" 
-              src="https://youtube-nocookie.com" 
-              title="GPSH Video Player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen 
+
+          {/* FIXED YOUTUBE */}
+
+          <div className="aspect-video rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
+
+            <iframe
+              className="w-full h-full"
+              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=0&rel=0`}
+              title="GPSH Smart House"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
             />
+
           </div>
+
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="products" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {features.map((feat, idx) => (
-            <div key={idx} className="border border-zinc-800 bg-zinc-900/20 p-8 rounded-3xl">
-              <h3 className="text-xl font-bold mb-2">{feat.title}</h3>
-              <p className="text-zinc-400 text-sm">{feat.desc}</p>
+      {/* =========================================
+          FEATURES
+      ========================================= */}
+
+      <section className="max-w-7xl mx-auto px-6 py-24">
+
+        <div className="text-center mb-16">
+
+          <h2 className="text-4xl font-black mb-4">
+            核心技術
+          </h2>
+
+          <p className="text-zinc-500">
+            模組化鋼構 × 太陽能 × 智能控制 × 可移動資產
+          </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          {features.map((feature, index) => (
+
+            <div
+              key={index}
+              className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 hover:border-green-500 transition"
+            >
+
+              <div className="text-4xl text-green-500 mb-5">
+                ⚡
+              </div>
+
+              <h3 className="text-xl font-black">
+                {feature}
+              </h3>
+
             </div>
+
           ))}
         </div>
       </section>
 
-      {/* ================= CONFIGURATOR (客製配置器) ================= */}
-      <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
-        
-        {/* Step 1: 選擇規格 */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-black mb-2 flex items-center text-green-400">
-            <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">1</span>
-            選擇基礎規格尺寸
-          </h2>
-          <p className="text-zinc-400 mb-6">點選下方型號，右側摘要將自動同步基礎尺寸價格與結構關聯佈局。</p>
-          <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-4">
-            {products.map((prod) => (
-              <div 
-                key={prod.id}
-                onClick={() => handleProductChange(prod)}
-                className={`p-6 rounded-2xl border cursor-pointer transition flex flex-col justify-between ${
-                  activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20 hover:border-zinc-700'
-                }`}
+      {/* =========================================
+          PRODUCTS
+      ========================================= */}
+
+      <section
+        id="products"
+        className="bg-zinc-950 border-y border-zinc-900"
+      >
+
+        <div className="max-w-7xl mx-auto px-6 py-24">
+
+          <div className="text-center mb-16">
+
+            <h2 className="text-4xl font-black mb-4">
+              產品系列
+            </h2>
+
+            <p className="text-zinc-500">
+              模組化住宅 × 綠能系統 × 投資型資產
+            </p>
+
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+
+            {products.map((item, index) => (
+
+              <div
+                key={index}
+                className="bg-black border border-zinc-800 rounded-[32px] overflow-hidden hover:border-green-500 transition"
               >
-                <div>
-                  <h3 className="text-lg font-bold mb-1">{prod.name}</h3>
-                  <p className="text-zinc-500 text-xs line-clamp-2">{prod.desc}</p>
+
+                <div className="h-56 flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black text-7xl">
+                  🏠
                 </div>
-                <div className="text-sm font-bold text-green-400 mt-4">NT$ {prod.price.toLocaleString()}</div>
+
+                <div className="p-8">
+
+                  <h3 className="text-2xl font-black mb-3">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-zinc-400 leading-relaxed mb-6">
+                    {item.desc}
+                  </p>
+
+                  <div className="text-green-500 text-2xl font-black mb-8">
+                    {item.price}
+                  </div>
+
+                  <a
+                    href="#configurator"
+                    className="block text-center bg-white text-black py-4 rounded-2xl font-black hover:scale-105 transition"
+                  >
+                    查看配置
+                  </a>
+
+                </div>
               </div>
+
             ))}
           </div>
         </div>
+      </section>
 
-        {/* 雙欄主客製化介面 */}
-        <div className="grid lg:grid-cols-3 gap-12 items-start">
-          <div className="lg:col-span-2 space-y-12">
-            
-            {/* Step 2: 客製細部建材 */}
-            <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8 space-y-6">
-              <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
-                <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">2</span>
-                客製細部建材與結構格局
-              </h2>
-              
-              <div className="grid sm:grid-cols-2 gap-6 pt-2">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">室內間隔佈局</label>
-                  <select 
-                    value={selectedPlan?.id || ''} 
-                    onChange={(e) => setSelectedPlan(currentFloorPlans.find(p => p.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {currentFloorPlans.map(p => (
-                      <option key={p.id} value={p.id}>{p.name} (+NT$ {p.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
+      {/* =========================================
+          CONFIGURATOR
+      ========================================= */}
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">入戶大門門款</label>
-                  <select 
-                    value={selectedDoor?.id || ''} 
-                    onChange={(e) => setSelectedDoor(productOptions.entranceDoors.find(d => d.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {productOptions.entranceDoors.map(d => (
-                      <option key={d.id} value={d.id}>{d.name} (+NT$ {d.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
+      <section
+        id="configurator"
+        className="max-w-7xl mx-auto px-6 py-24"
+      >
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">防噪防颱窗戶款式</label>
-                  <select 
-                    value={selectedWindow?.id || ''} 
-                    onChange={(e) => setSelectedWindow(productOptions.windows.find(w => w.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {productOptions.windows.map(w => (
-                      <option key={w.id} value={w.id}>{w.name} (+NT$ {w.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
+        <div className="text-center mb-16">
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">外牆板材顏色與雕花板</label>
-                  <select 
-                    value={selectedWall?.id || ''} 
-                    onChange={(e) => setSelectedWall(productOptions.exteriorWalls.find(w => w.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {productOptions.exteriorWalls.map(w => (
-                      <option key={w.id} value={w.id}>{w.name} (+NT$ {w.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
+          <h2 className="text-4xl font-black mb-4">
+            即時客製配置
+          </h2>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">室內防水防磨地面材料</label>
-                  <select 
-                    value={selectedFloor?.id || ''} 
-                    onChange={(e) => setSelectedFloor(productOptions.flooring.find(f => f.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {productOptions.flooring.map(f => (
-                      <option key={f.id} value={f.id}>{f.name} (+NT$ {f.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
+          <p className="text-zinc-500">
+            即時選配 × 即時報價 × LINE 成交
+          </p>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2">配電迴路與插座面板規格</label>
-                  <select 
-                    value={selectedSocket?.id || ''} 
-                    onChange={(e) => setSelectedSocket(productOptions.powerSockets.find(s => s.id === e.target.value) || null)}
-                    className="w-full bg-black border border-zinc-800 rounded-xl p-3 text-sm text-zinc-300 focus:border-green-500 outline-none cursor-pointer"
-                  >
-                    {productOptions.powerSockets.map(s => (
-                      <option key={s.id} value={s.id}>{s.name} (+NT$ {s.price.toLocaleString()})</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+        </div>
 
-            {/* Step 3: 智慧加購項目 */}
-            <div>
-              <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
-                <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">3</span>
-                勾選高級智慧與系統功能加購
-              </h2>
-              <p className="text-zinc-400 mb-8 text-sm">可複選。升級項目皆隨車出廠與模組化整合安裝。</p>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {optionList.map((opt) => (
-                  <label key={opt.id} className={`flex flex-col rounded-2xl border overflow-hidden cursor-pointer select-none transition ${selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'}`}>
-                    <div className="h-36 bg-zinc-950 relative flex items-center justify-center overflow-hidden">
-                      <img src={opt.img} alt={opt.name} className="w-full h-full object-cover opacity-60" />
-                      <div className="absolute top-3 left-3">
-                        <input type="checkbox" checked={!!selectedOptions[opt.id]} onChange={() => handleCheckboxChange(opt.id)} className="accent-green-500 w-5 h-5 rounded cursor-pointer" />
-                      </div>
-                    </div>
-                    <div className="p-4 flex flex-col justify-between flex-1 bg-zinc-900/30">
-                      <span className="font-bold text-sm text-white mb-2">{opt.name}</span>
-                      <span className="text-green-400 text-xs font-mono font-bold">+ NT$ {opt.price.toLocaleString()}</span>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
+        <div className="grid lg:grid-cols-2 gap-8">
 
-          </div>
+          {/* LEFT */}
 
-          {/* 右側明細摘要固定面板 */}
-          <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
-            <div className="space-y-3 text-xs text-zinc-400 min-h-[120px]">
-              <div className="flex justify-between text-white font-medium">
-                <span>{activeProduct?.name} 基礎結構</span>
-                <span>NT$ {basePrice.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>• 空間間隔佈局 ({selectedPlan?.name || '標準款'})</span>
-                <span className="text-zinc-300">NT$ {planPrice.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>• 細部工藝加選明細</span>
-                <span className="text-zinc-300">NT$ {materialPrice.toLocaleString()}</span>
-              </div>
-              {optionList.filter(opt => selectedOptions[opt.id]).map(opt => (
-                <div key={opt.id} className="flex justify-between text-zinc-400">
-                  <span>+ {opt.name}</span>
-                  <span>NT$ {opt.price.toLocaleString()}</span>
-                </div>
+          <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8">
+
+            <h3 className="text-2xl font-black mb-8">
+              選配項目
+            </h3>
+
+            <div className="space-y-4">
+
+              {options.map((item) => (
+
+                <label
+                  key={item.id}
+                  className={`flex items-center justify-between border rounded-2xl p-5 cursor-pointer transition ${
+                    selectedOptions[item.id]
+                      ? 'border-green-500 bg-green-500/10'
+                      : 'border-zinc-800 hover:border-zinc-700'
+                  }`}
+                >
+
+                  <div className="flex items-center gap-4">
+
+                    <input
+                      type="checkbox"
+                      checked={!!selectedOptions[item.id]}
+                      onChange={() => toggleOption(item.id)}
+                      className="w-5 h-5 accent-green-500"
+                    />
+
+                    <span className="font-semibold">
+                      {item.name}
+                    </span>
+
+                  </div>
+
+                  <span className="text-green-400 font-mono">
+                    + NT$ {item.price.toLocaleString()}
+                  </span>
+
+                </label>
+
               ))}
             </div>
+          </div>
 
-            <div className="border-t border-zinc-800 pt-6 mt-6">
-              <div className="flex justify-between items-baseline mb-8">
-                <span className="text-zinc-400 text-sm">預估總價</span>
-                <span className="text-3xl font-black text-green-500">NT$ {totalPrice.toLocaleString()}</span>
+          {/* RIGHT */}
+
+          <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8 flex flex-col justify-between">
+
+            <div>
+
+              <h3 className="text-2xl font-black mb-8">
+                即時報價
+              </h3>
+
+              <div className="space-y-4">
+
+                <div className="flex justify-between text-zinc-400">
+
+                  <span>基礎價格</span>
+
+                  <span>
+                    NT$ {basePrice.toLocaleString()}
+                  </span>
+
+                </div>
+
+                {selectedList.map((item) => (
+
+                  <div
+                    key={item.id}
+                    className="flex justify-between text-green-400"
+                  >
+
+                    <span>
+                      {item.name}
+                    </span>
+
+                    <span>
+                      + NT$ {item.price.toLocaleString()}
+                    </span>
+
+                  </div>
+
+                ))}
+
+                <div className="border-t border-zinc-800 pt-6 flex justify-between text-3xl font-black">
+
+                  <span>總價</span>
+
+                  <span className="text-green-500">
+                    NT$ {totalPrice.toLocaleString()}
+                  </span>
+
+                </div>
+
               </div>
-              <div className="grid gap-4">
-                <button onClick={handlePdfExport} className="w-full bg-white text-black py-4 rounded-xl font-bold hover:bg-zinc-200 transition">產出專屬報價</button>
-                <a href={lineUrl} target="_blank" rel="noreferrer" className="w-full text-center">
-                  <button className="w-full border border-green-500/50 text-green-400 py-4 rounded-xl font-bold hover:bg-green-500/10 transition">與 LINE 顧問討論可行性</button>
-                </a>
-              </div>
+            </div>
+
+            <div className="space-y-4 mt-10">
+
+              <button
+                onClick={handleExport}
+                className="w-full bg-green-500 text-black py-5 rounded-2xl font-black hover:scale-105 transition"
+              >
+                產生專屬報價
+              </button>
+
+              <a
+                href={lineUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center border border-zinc-700 py-5 rounded-2xl hover:bg-zinc-800 transition"
+              >
+                加入 LINE 顧問
+              </a>
+
             </div>
           </div>
         </div>
       </section>
 
-      {/* INVESTMENT */}
-      <section id="investment" className="max-w-7xl mx-auto px-6 py-24 text-center">
-        <h2 className="text-4xl font-black mb-4">ESG 綠能住宅 投資方案</h2>
-        <p className="text-zinc-400 max-w-xl mx-auto mb-12">高流動性的移動資產，結合民宿經營與淨零碳排趨勢，打造兼具高投報率與環境友善的資產配置。</p>
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
-          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
-            <h3 className="text-xl font-bold text-green-400 mb-2">鄉村輕旅民宿方案</h3>
-            <p className="text-zinc-500 text-sm mb-6">低土地整地成本，快速開張運營</p>
-            <ul className="space-y-3 text-zinc-300 text-sm">
-              <li>• 專人協助場域能源與離網規劃</li>
-              <li>• 支援快速撤點重組，折舊風險極低</li>
-              <li>• 結合智慧鎖與 AI 管理，節省人力營運成本</li>
-            </ul>
-          </div>
-          <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
-            <h3 className="text-xl font-bold text-green-400 mb-2">企業 ESG 園區宿舍</h3>
-            <p className="text-zinc-500 text-sm mb-6">滿足企業減碳指標與綠電憑證需求</p>
-            <ul className="space-y-3 text-zinc-300 text-sm">
-              <li>• 自帶太陽能發電，符合綠色建築規範</li>
-              <li>• 工廠預製模組結構，可全數回收及異地重建</li>
-              <li>• 縮短專案開發週期 70% 以上</li>
-            </ul>
+      {/* =========================================
+          INVESTMENT
+      ========================================= */}
+
+      <section
+        id="investment"
+        className="bg-zinc-950 border-y border-zinc-900"
+      >
+
+        <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+
+          <h2 className="text-5xl font-black mb-8">
+            可移動的能源型資產
+          </h2>
+
+          <p className="text-zinc-400 max-w-3xl mx-auto text-lg leading-relaxed mb-16">
+
+            不只是貨櫃屋，
+            而是結合綠能發電、分散式儲能、
+            智能能源控制與高資產回報率的 ESG 綠能住宅平台。
+
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="bg-black border border-zinc-800 rounded-3xl p-10">
+
+              <div className="text-5xl font-black text-green-500 mb-4">
+                2年
+              </div>
+
+              <div className="text-zinc-500">
+                預估投資回本期
+              </div>
+
+            </div>
+
+            <div className="bg-black border border-zinc-800 rounded-3xl p-10">
+
+              <div className="text-5xl font-black text-green-500 mb-4">
+                25%
+              </div>
+
+              <div className="text-zinc-500">
+                年化綜合收益率
+              </div>
+
+            </div>
+
+            <div className="bg-black border border-zinc-800 rounded-3xl p-10">
+
+              <div className="text-5xl font-black text-green-500 mb-4">
+                OFF GRID
+              </div>
+
+              <div className="text-zinc-500">
+                全天候能源獨立
+              </div>
+
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
-        <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
+      {/* =========================================
+          FOOTER
+      ========================================= */}
+
+      <footer className="border-t border-zinc-900 py-12 text-center text-zinc-500">
+
+        <div className="text-white text-2xl font-black mb-4">
+          GPSH SMART HOUSE
+        </div>
+
+        <p className="mb-2">
+          可展開式能源型智能移動住宅系統
+        </p>
+
+        <p className="text-sm">
+          © 2026 GPSH All Rights Reserved.
+        </p>
+
       </footer>
     </div>
   )
 }
+```
