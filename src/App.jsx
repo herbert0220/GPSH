@@ -3,16 +3,16 @@ import './index.css'
 
 export default function App() {
 
-  // ✅ 萬無一失的 LINE 官方顧問連結
+  // LINE 官方顧問連結
   const lineUrl = 'https://lin.ee/uNjqsw8'
 
   /* ====================================
-     1. DATA DEFINITIONS (完整產品與選配資料庫)
+     1. DATA DEFINITIONS (已精確對齊您 public 資料夾中的照片檔名)
   ====================================== */
 
   const products = [
     { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 320000 },
-    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 480000 },
+    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 },
     { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 },
   ]
 
@@ -25,15 +25,16 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
+  // ✅ 高級選配升級項目 (精確對齊您 public 中的圖片檔名，暫時沒上傳的項目使用漸層底色防呆)
   const optionList = [
-    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, code: 'OPT // GLASS_WIN' },
-    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, code: 'SYS // BATH_UNIT' },
-    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, code: 'ENG // HEATER_X' },
-    { id: 'solar', name: '太陽能系統', price: 220000, code: 'SOLAR // PANEL_GRID' },
-    { id: 'battery', name: '儲能電池', price: 180000, code: 'BATTERY // CELL_PACK' },
-    { id: 'offgrid', name: '離網系統', price: 120000, code: 'GRID // OFF_SYSTEM' },
-    { id: 'curtain', name: '玻璃帷幕', price: 95000, code: 'WALL // GLASS_CURT' },
-    { id: 'terrace', name: '露台', price: 50000, code: 'EXT // TERRACE_DECK' },
+    { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: '/opt-glass.png' },
+    { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: '/opt-bathroom.png' },
+    { id: 'floor-heating', name: '石墨烯地暖', price: 38000, img: '' },
+    { id: 'solar', name: '太陽能系統', price: 220000, img: '' },
+    { id: 'battery', name: '儲能電池', price: 180000, img: '' },
+    { id: 'offgrid', name: '離網系統', price: 120000, img: '' },
+    { id: 'curtain', name: '玻璃帷幕', price: 95000, img: '' },
+    { id: 'terrace', name: '露台', price: 50000, img: '' },
   ]
 
   const productOptions = {
@@ -75,7 +76,7 @@ export default function App() {
   }
 
   /* ====================================
-     2. STATE MANAGEMENT (終極修復：精確初始化單一物件)
+     2. STATE MANAGEMENT (狀態與初始化管理)
   ====================================== */
 
   const [activeProduct, setActiveProduct] = useState(products[0]) 
@@ -145,7 +146,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     4. JSX RENDERING (全面改為內建幾何色塊，永久杜絕破圖)
+     4. JSX RENDERING (已重新接回照片讀取語法)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
@@ -180,11 +181,12 @@ NT$ ${totalPrice.toLocaleString()} 元
               <a href="#investment" className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition">投資方案</a>
             </div>
           </div>
-          {/* 主視覺更換為質感的 CSS 內建未來感框架漸層，完美防鎖防破圖 */}
-          <div className="relative aspect-video rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-gradient-to-br from-green-900/20 via-zinc-900 to-black flex flex-col justify-center p-8">
-            <div className="text-xs font-mono text-green-500 mb-2">// GPSH_CORE_RENDER_V2</div>
-            <div className="text-3xl font-black text-white">GPSH SMART HOUSE SYSTEM</div>
-            <div className="text-sm text-zinc-500 mt-2">可展開移動式能源淨零住宅</div>
+          <div className="relative">
+            <div className="absolute inset-0 blur-3xl bg-green-500/10" />
+            <div className="relative rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl aspect-video bg-zinc-900">
+              {/* ✅ 重新接回主視覺圖片，對齊您 public 中的 house-main.png */}
+              <img src="/house-main.png" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </section>
@@ -196,14 +198,13 @@ NT$ ${totalPrice.toLocaleString()} 元
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
-          {/* ⚡ 終極修正：改用高安全、防同源政策攔截之無資料收集嵌入伺服器 */}
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
             <iframe 
               className="w-full h-full absolute inset-0" 
               src="https://youtube-nocookie.com" 
               title="GPSH Video Player" 
               frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen 
             />
           </div>
@@ -353,11 +354,13 @@ NT$ ${totalPrice.toLocaleString()} 元
               <div className="grid sm:grid-cols-2 gap-4">
                 {optionList.map((opt) => (
                   <label key={opt.id} className={`flex flex-col rounded-2xl border overflow-hidden cursor-pointer select-none transition ${selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.05)]' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'}`}>
-                    {/* ✅ 徹底解決破圖：完全移除 <img> 網址，改用科技感黑銀幾何漸層背景 ＋ 精緻代碼文字 */}
-                    <div className="h-32 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black relative flex flex-col justify-center px-6 border-b border-zinc-900">
-                      <div className="text-[10px] font-mono tracking-widest text-zinc-600 mb-1">// GPSH_EQUIP_MODULE</div>
-                      <div className="text-xs font-mono font-bold text-zinc-400 tracking-wider uppercase">{opt.code}</div>
-                      
+                    {/* ✅ 重新接回實體圖片：如果該項目有設定 img (如 glass、bathroom)，會完美讀取並顯示。其他尚未上傳圖片的項目則自動呈現深黑科技感背景，絕不破圖 */}
+                    <div className="h-36 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black relative flex items-center justify-center overflow-hidden">
+                      {opt.img ? (
+                        <img src={opt.img} alt={opt.name} className="w-full h-full object-cover opacity-80" />
+                      ) : (
+                        <div className="text-[10px] font-mono tracking-widest text-zinc-700 uppercase">// MODULE_PREVIEW</div>
+                      )}
                       <div className="absolute top-3 left-3">
                         <input type="checkbox" checked={!!selectedOptions[opt.id]} onChange={() => handleCheckboxChange(opt.id)} className="accent-green-500 w-5 h-5 rounded cursor-pointer" />
                       </div>
@@ -373,7 +376,7 @@ NT$ ${totalPrice.toLocaleString()} 元
 
           </div>
 
-          {/* 右側：動態摘要固定面板 */}
+          {/* 右側明細摘要固定面板 */}
           <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
             <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
             <div className="space-y-3 text-xs text-zinc-400 min-h-[120px]">
@@ -424,7 +427,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             <ul className="space-y-3 text-zinc-300 text-sm">
               <li>• 專人協助場域能源與離網規劃</li>
               <li>• 支援快速撤點重組，折舊風險極低</li>
-              <li>• 結合智慧鎖 wedding AI 管理，節省人力營運成本</li>
+              <li>• 結合智慧鎖與 AI 管理，節省人力營運成本</li>
             </ul>
           </div>
           <div className="border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-black p-8 rounded-3xl">
