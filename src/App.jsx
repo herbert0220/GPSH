@@ -7,13 +7,13 @@ export default function App() {
   const lineUrl = 'https://lin.ee/uNjqsw8'
 
   /* ====================================
-     1. DATA DEFINITIONS (已精確對齊您 public 資料夾中的照片檔名)
+     1. DATA DEFINITIONS (資料庫定義)
   ====================================== */
 
   const products = [
-    { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 320000 },
-    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 },
-    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 },
+    { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
+    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 680000 },
+    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 1280000 },
   ]
 
   const features = [
@@ -25,7 +25,6 @@ export default function App() {
     { title: '快速部署', desc: '工廠模組化量產，現場只需一天即可完成展開組裝。' },
   ]
 
-  // ✅ 高級選配升級項目 (精確對齊您 public 中的圖片檔名，暫時沒上傳的項目使用漸層底色防呆)
   const optionList = [
     { id: 'glass', name: '落地玻璃門隔音窗', price: 45000, img: '/opt-glass.png' },
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: '/opt-bathroom.png' },
@@ -76,7 +75,7 @@ export default function App() {
   }
 
   /* ====================================
-     2. STATE MANAGEMENT (狀態與初始化管理)
+     2. STATE MANAGEMENT (狀態管理)
   ====================================== */
 
   const [activeProduct, setActiveProduct] = useState(products[0]) 
@@ -92,7 +91,7 @@ export default function App() {
   const [selectedSocket, setSelectedSocket] = useState(productOptions.powerSockets[0])
 
   /* ====================================
-     3. BUSINESS LOGIC & CALCULATIONS (動態計算)
+     3. BUSINESS LOGIC & CALCULATIONS (商業邏輯)
   ====================================== */
 
   const handleProductChange = (prod) => {
@@ -146,7 +145,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     4. JSX RENDERING (已重新接回照片讀取語法)
+     4. JSX RENDERING (外觀渲染)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
@@ -184,28 +183,28 @@ NT$ ${totalPrice.toLocaleString()} 元
           <div className="relative">
             <div className="absolute inset-0 blur-3xl bg-green-500/10" />
             <div className="relative rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl aspect-video bg-zinc-900">
-              {/* ✅ 重新接回主視覺圖片，對齊您 public 中的 house-main.png */}
               <img src="/house-main.png" alt="GPSH SMART HOUSE" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* SHORTS VIDEO CONTAINER */}
+      {/* VIDEO SECTION (✅ 已修改為高性能原生原生 HTML5 播放器，直接加載上傳的影片檔) */}
       <section className="border-b border-zinc-900">
         <div className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-4xl font-black mb-8">工廠製造<br />到現場部署</h2>
             <p className="text-zinc-400 leading-relaxed">全程於模組化工廠精密製造，出廠前完成結構、防水與電力測試。現場當天即可展開基本部署。</p>
           </div>
+          
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
-            <iframe 
-              className="w-full h-full absolute inset-0" 
-              src="https://youtube-nocookie.com" 
-              title="GPSH Video Player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen 
+            <video 
+              className="w-full h-full object-cover"
+              src="/house-video.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
             />
           </div>
         </div>
@@ -223,10 +222,8 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-      {/* ================= CONFIGURATOR (客製配置器) ================= */}
+      {/* ================= CONFIGURATOR ================= */}
       <section id="configurator" className="max-w-7xl mx-auto px-6 py-24 border-b border-zinc-900">
-        
-        {/* Step 1: 選擇主機規格 */}
         <div className="mb-16">
           <h2 className="text-3xl font-black mb-2 flex items-center text-green-400">
             <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">1</span>
@@ -252,11 +249,8 @@ NT$ ${totalPrice.toLocaleString()} 元
           </div>
         </div>
 
-        {/* 雙欄主介面 */}
         <div className="grid lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-2 space-y-12">
-            
-            {/* Step 2: 客製細部建材 */}
             <div className="bg-zinc-900/40 border border-zinc-800 rounded-[32px] p-8 space-y-6">
               <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
                 <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">2</span>
@@ -344,7 +338,6 @@ NT$ ${totalPrice.toLocaleString()} 元
               </div>
             </div>
 
-            {/* Step 3: 高級智慧系統功能加購 */}
             <div>
               <h2 className="text-2xl font-black mb-2 flex items-center text-green-400">
                 <span className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 text-sm flex items-center justify-center mr-3 font-mono">3</span>
@@ -354,8 +347,7 @@ NT$ ${totalPrice.toLocaleString()} 元
               <div className="grid sm:grid-cols-2 gap-4">
                 {optionList.map((opt) => (
                   <label key={opt.id} className={`flex flex-col rounded-2xl border overflow-hidden cursor-pointer select-none transition ${selectedOptions[opt.id] ? 'border-green-500 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.05)]' : 'border-zinc-800 bg-zinc-900/10 hover:border-zinc-700'}`}>
-                    {/* ✅ 重新接回實體圖片：如果該項目有設定 img (如 glass、bathroom)，會完美讀取並顯示。其他尚未上傳圖片的項目則自動呈現深黑科技感背景，絕不破圖 */}
-                    <div className="h-36 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black relative flex items-center justify-center overflow-hidden">
+                    <div className="h-36 bg-zinc-950 relative flex items-center justify-center overflow-hidden">
                       {opt.img ? (
                         <img src={opt.img} alt={opt.name} className="w-full h-full object-cover opacity-80" />
                       ) : (
@@ -376,7 +368,6 @@ NT$ ${totalPrice.toLocaleString()} 元
 
           </div>
 
-          {/* 右側明細摘要固定面板 */}
           <div className="sticky top-28 border border-zinc-800 bg-zinc-900/50 p-8 rounded-[32px] backdrop-blur-md">
             <h3 className="text-xl font-bold mb-6 pb-4 border-b border-zinc-800">配備明細摘要</h3>
             <div className="space-y-3 text-xs text-zinc-400 min-h-[120px]">
