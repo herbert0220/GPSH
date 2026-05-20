@@ -11,7 +11,6 @@ export default function App() {
   ====================================== */
 
   const products = [
-    { id: '8ft', name: '8呎｜特殊款', desc: '適合展廳、戶外活動與廣告用空間', size: '8ft', price: 260000 },  
     { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
     { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
     { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
@@ -39,10 +38,7 @@ export default function App() {
 
   const productOptions = {
     floorPlans: {
-      '8ft': [
-        { id: '8-p1', name: '8呎 一房一廳', price: 0 },
-        { id: '8-p2', name: '8呎 兩房一廳隔間', price: 35000 },
-      ],'20ft': [
+      '20ft': [
         { id: '20-p1', name: '20呎 一房一廳一衛', price: 0 },
         { id: '20-p2', name: '20呎 兩房一廳一衛極簡風', price: 35000 },
       ],
@@ -64,19 +60,18 @@ export default function App() {
 
   // 📸 實景相片編列路徑庫
   const galleryData = {
-    exterior: Array.from({ length: 16 }, (_, i) => `/ext-${i + 1}.png`),
+    exterior: Array.from({ length: 24 }, (_, i) => `/ext-${i + 1}.png`),
     interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
     floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
   }
 
   /* ====================================
-     2. STATE MANAGEMENT (狀態管理 - 修復初始化順序)
+     2. STATE MANAGEMENT (狀態管理)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products[0]) // ✅ 核心修復：精確初始化為 20呎 基礎物件
+  const [activeProduct, setActiveProduct] = useState(products[0]) 
   const [selectedOptions, setSelectedOptions] = useState({})
   
-  // ✅ 核心修復：必須在 activeProduct 之後宣告，確保 currentFloorPlans 的動態讀取不會引發 undefined 崩潰
   const currentFloorPlans = productOptions.floorPlans[activeProduct?.id || '20ft'] || []
 
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
@@ -85,12 +80,14 @@ export default function App() {
   // 控制案例藝廊切換的分頁狀態
   const [activeTab, setActiveTab] = useState('exterior')
 
+  // ✅ 💡 新增：控制大圖燈箱放大顯現的狀態機（如果為 null 代表關閉，有網址代表放大該圖）
+  const [lightboxImg, setLightboxImg] = useState(null)
+
   /* ====================================
      3. BUSINESS LOGIC (演算法與加總邏輯)
   ====================================== */
 
   const getMultiplier = () => {
-    if (activeProduct?.id === '8ft') return 0.8
     if (activeProduct?.id === '30ft') return 1.5
     if (activeProduct?.id === '40ft') return 2
     return 1
@@ -155,7 +152,7 @@ NT$ ${totalPrice.toLocaleString()} 元
      4. JSX RENDERING (外觀佈局與多功能藝廊)
   ====================================== */
   return (
-    <div className="bg-black text-white min-h-screen overflow-x-hidden font-sans">
+    <div className="bg-black text-white min-h-screen overflow-x-hidden font-sans relative">
 
       {/* HEADER */}
       <header className="sticky top-0 z-50 bg-black/70 backdrop-blur-xl border-b border-zinc-900">
@@ -231,14 +228,14 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-      {/* 📸 ✅ 實景範例藝廊組件 (已修正讀取順序，保證成功載入) */}
+      {/* 📸 實景案例範例藝廊 */}
       <section className="max-w-7xl mx-auto px-6 py-20 border-b border-zinc-900">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl font-black text-white mb-2">實景案例範例藝廊</h2>
-            <p className="text-zinc-500 text-sm">點選分頁瀏覽外觀設計、內部裝潢及2樓延伸擴充實景照片。</p>
+            <p className="text-zinc-500 text-sm">點選分頁瀏覽設計實景。點擊任何一張相片即可【放大全螢幕觀看】。</p>
           </div>
-          {/* 分頁 Tab 切換切換鈕 */}
+          {/* 分頁 Tab */}
           <div className="flex bg-zinc-900/80 p-1.5 rounded-2xl border border-zinc-800 w-fit self-start md:self-auto">
             <button 
               onClick={() => setActiveTab('exterior')}
@@ -264,7 +261,12 @@ NT$ ${totalPrice.toLocaleString()} 元
         {/* 圖片展示網格 */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[580px] overflow-y-auto pr-2 custom-scrollbar">
           {galleryData[activeTab].map((src, index) => (
-            <div key={index} className="aspect-video bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-md group relative">
+            <div 
+              key={index} 
+              // ✅ 點擊時觸發狀態機，將當前圖片網址丟入Lightbox狀態
+              onClick={() => setLightboxImg(src)}
+              className="aspect-video bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-md group relative cursor-zoom-in"
+            >
               <img 
                 src={src} 
                 alt={`${activeTab}-${index + 1}`} 
@@ -290,7 +292,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                 key={prod.id}
                 onClick={() => handleProductChange(prod)}
                 className={`p-6 rounded-2xl border cursor-pointer transition ${
-                  activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-zinc-900/20'
+                  activeProduct.id === prod.id ? 'border-green-500 bg-green-500/5 shadow-[0_0_25px_rgba(34,197,94,0.1)]' : 'border-zinc-800 bg-zinc-900/20'
                 }`}
               >
                 <h3 className="text-lg font-bold mb-2">{prod.name}</h3>
@@ -448,6 +450,32 @@ NT$ ${totalPrice.toLocaleString()} 元
       <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
         <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
       </footer>
+
+      {/* ✅ 💡 新增：高質感全螢幕大圖彈出燈箱組件 (Lightbox) */}
+      {lightboxImg && (
+        <div 
+          onClick={() => setLightboxImg(null)} // 點選背景任何地方立刻關閉縮回
+          className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 cursor-zoom-out animate-fadeIn"
+        >
+          {/* 右上角獨立關閉按鈕 */}
+          <button 
+            onClick={() => setLightboxImg(null)}
+            className="absolute top-6 right-6 w-12 h-12 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 rounded-full flex items-center justify-center text-white text-xl font-bold transition z-50 shadow-lg"
+          >
+            ✕
+          </button>
+          
+          {/* 放大後的實體大圖大圖 */}
+          <div className="relative max-w-5xl max-h-[85vh] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950 flex items-center justify-center">
+            <img 
+              src={lightboxImg} 
+              alt="Lightbox Large Preview" 
+              className="w-full h-full object-contain max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()} // 防止點選大圖本身觸發關閉
+            />
+          </div>
+        </div>
+      )}
 
     </div>
   )
