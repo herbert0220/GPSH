@@ -57,7 +57,12 @@ export default function App() {
       { id: 'd3', name: '斷橋鋁鋼化大門', price: 28000, img: '/door-d3.png' },
     ],
   }
-
+ // 📸 新增：對齊您實體照片總數的 35 張照片資料陣列生成
+  const galleryData = {
+    exterior: Array.from({ length: 24 }, (_, i) => `/ext-${i + 1}.png`),
+    interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
+    floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
+  }
   /* ====================================
      2. STATE MANAGEMENT (狀態初始化管理)
   ====================================== */
