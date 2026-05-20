@@ -3,11 +3,11 @@ import './index.css'
 
 export default function App() {
 
-  // ✅ 經最終校對之正確唯一 LINE 官方顧問連結
-  const lineUrl = 'https://lin.ee/uNjqsw8'
+  // LINE 官方顧問連結
+  const lineUrl = 'https://lin.ee'
 
   /* ====================================
-     1. DATA DEFINITIONS (產品型號、選配與格局資料庫)
+     1. DATA DEFINITIONS (完整產品、選配與格局資料庫)
   ====================================== */
 
   const products = [
@@ -30,7 +30,7 @@ export default function App() {
     { id: 'bathroom', name: '乾濕分離浴室', price: 65000, img: '/opt-bathroom.png' },
     { id: 'wall', name: '金屬雕花外牆', price: 38000, img: '/opt-floor-heating.png' },
     { id: 'solar', name: '太陽能離網10度儲能系統', price: 350000, img: '/opt-solar.png' },
-    { id: 'roof', name: '斜屋頂', price: 150000, img: '/opt-battery.png' },
+    { id: 'battery', name: '斜屋頂', price: 150000, img: '/opt-battery.png' },
     { id: 'terrace', name: '露臺', price: 80000, img: '/opt-offgrid.png' },
     { id: 'floor', name: '石墨烯保溫地板', price: 95000, img: '/opt-curtain.png' },
     { id: 'color', name: '框架選色', price: 20000, img: '/opt-terrace.png' },
@@ -57,23 +57,29 @@ export default function App() {
       { id: 'd3', name: '斷橋鋁鋼化大門', price: 28000, img: '/door-d3.png' },
     ],
   }
- // 📸 新增：對齊您實體照片總數的 35 張照片資料陣列生成
+
+  // 📸 實景相片編列路徑庫
   const galleryData = {
     exterior: Array.from({ length: 24 }, (_, i) => `/ext-${i + 1}.png`),
     interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
     floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
   }
+
   /* ====================================
-     2. STATE MANAGEMENT (狀態初始化管理)
+     2. STATE MANAGEMENT (狀態管理 - 修復初始化順序)
   ====================================== */
 
-  const [activeProduct, setActiveProduct] = useState(products[0])
+  const [activeProduct, setActiveProduct] = useState(products[0]) // ✅ 核心修復：精確初始化為 20呎 基礎物件
   const [selectedOptions, setSelectedOptions] = useState({})
   
-  const currentFloorPlans = productOptions.floorPlans[activeProduct?.id] || []
+  // ✅ 核心修復：必須在 activeProduct 之後宣告，確保 currentFloorPlans 的動態讀取不會引發 undefined 崩潰
+  const currentFloorPlans = productOptions.floorPlans[activeProduct?.id || '20ft'] || []
 
   const [selectedPlan, setSelectedPlan] = useState(productOptions.floorPlans['20ft'][0])
   const [selectedDoor, setSelectedDoor] = useState(productOptions.entranceDoors[0])
+
+  // 控制案例藝廊切換的分頁狀態
+  const [activeTab, setActiveTab] = useState('exterior')
 
   /* ====================================
      3. BUSINESS LOGIC (演算法與加總邏輯)
@@ -94,13 +100,10 @@ export default function App() {
   }
 
   const handleCheckboxChange = (id) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }))
+    setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
-  const basePrice = activeProduct.price
+  const basePrice = activeProduct?.price || 0
   const planPrice = (selectedPlan?.price || 0) * getMultiplier()
   const doorPrice = (selectedDoor?.price || 0) * getMultiplier()
 
@@ -144,7 +147,7 @@ NT$ ${totalPrice.toLocaleString()} 元
   }
 
   /* ====================================
-     4. JSX RENDERING (前端外觀渲染)
+     4. JSX RENDERING (外觀佈局與多功能藝廊)
   ====================================== */
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden font-sans">
@@ -181,16 +184,10 @@ NT$ ${totalPrice.toLocaleString()} 元
               可展開式能源型智能移動住宅系統，結合翼展結構、太陽能、儲能與 AI 智慧能源管理。
             </p>
             <div className="flex flex-wrap gap-4">
-              <a
-                href="#configurator"
-                className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition"
-              >
+              <a href="#configurator" className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">
                 開始客製配置
               </a>
-              <a
-                href="#investment"
-                className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition"
-              >
+              <a href="#investment" className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition">
                 投資方案
               </a>
             </div>
@@ -212,7 +209,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             <p className="text-zinc-400 leading-relaxed">模組化生產，快速現場展開。</p>
           </div>
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
-            <video className="w-full h-full object-cover" src="/house-video.mp4" poster="/house-main.png" controls loop playsInline />
+            <video className="w-full h-full object-cover cursor-pointer" src="/house-video.mp4" poster="/house-main.png" controls loop />
           </div>
         </div>
       </section>
@@ -224,6 +221,54 @@ NT$ ${totalPrice.toLocaleString()} 元
             <div key={idx} className="border border-zinc-800 bg-zinc-900/20 p-8 rounded-3xl">
               <h3 className="text-xl font-bold mb-2">{feat.title}</h3>
               <p className="text-zinc-400 text-sm">{feat.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 📸 ✅ 實景範例藝廊組件 (已修正讀取順序，保證成功載入) */}
+      <section className="max-w-7xl mx-auto px-6 py-20 border-b border-zinc-900">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div>
+            <h2 className="text-3xl font-black text-white mb-2">實景案例範例藝廊</h2>
+            <p className="text-zinc-500 text-sm">點選分頁瀏覽外觀設計、內部裝潢及2樓延伸擴充實景照片。</p>
+          </div>
+          {/* 分頁 Tab 切換切換鈕 */}
+          <div className="flex bg-zinc-900/80 p-1.5 rounded-2xl border border-zinc-800 w-fit self-start md:self-auto">
+            <button 
+              onClick={() => setActiveTab('exterior')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition duration-200 ${activeTab === 'exterior' ? 'bg-green-500 text-black' : 'text-zinc-400 hover:text-white'}`}
+            >
+              外觀範例 ({galleryData.exterior.length}張)
+            </button>
+            <button 
+              onClick={() => setActiveTab('interior')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition duration-200 ${activeTab === 'interior' ? 'bg-green-500 text-black' : 'text-zinc-400 hover:text-white'}`}
+            >
+              室內範例 ({galleryData.interior.length}張)
+            </button>
+            <button 
+              onClick={() => setActiveTab('floor2')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-xs transition duration-200 ${activeTab === 'floor2' ? 'bg-green-500 text-black' : 'text-zinc-400 hover:text-white'}`}
+            >
+              2樓範例 ({galleryData.floor2.length}張)
+            </button>
+          </div>
+        </div>
+
+        {/* 圖片展示網格 */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[580px] overflow-y-auto pr-2 custom-scrollbar">
+          {galleryData[activeTab].map((src, index) => (
+            <div key={index} className="aspect-video bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-md group relative">
+              <img 
+                src={src} 
+                alt={`${activeTab}-${index + 1}`} 
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-300"
+                onError={(e) => { e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://w3.org" width="100" height="50" viewBox="0 0 100 50"><rect width="100" height="50" fill="%2318181b"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%233f3f46" font-family="monospace" font-size="6">WAIT_FOR_UPLOAD</text></svg>'; }}
+              />
+              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-mono text-zinc-400 opacity-0 group-hover:opacity-100 transition">
+                #{String(index + 1).padStart(2, '0')}
+              </div>
             </div>
           ))}
         </div>
@@ -260,9 +305,9 @@ NT$ ${totalPrice.toLocaleString()} 元
             <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-8">
               <h3 className="text-2xl font-black mb-6 text-green-400">格局配置</h3>
               <select
-                value={selectedPlan?.id}
+                value={selectedPlan?.id || ''}
                 onChange={(e) => setSelectedPlan(currentFloorPlans.find((p) => p.id === e.target.value) || null)}
-                className="w-full bg-black border border-zinc-800 rounded-xl p-4 text-white outline-none focus:border-green-500"
+                className="w-full bg-black border border-zinc-800 rounded-xl p-4 text-white outline-none focus:border-green-500 cursor-pointer"
               >
                 {currentFloorPlans.map((plan) => (
                   <option key={plan.id} value={plan.id}>{plan.name}</option>
@@ -279,7 +324,7 @@ NT$ ${totalPrice.toLocaleString()} 元
                     key={door.id}
                     onClick={() => setSelectedDoor(door)}
                     className={`border rounded-2xl overflow-hidden cursor-pointer transition flex flex-col justify-between ${
-                      selectedDoor.id === door.id ? 'border-green-500 bg-green-500/5' : 'border-zinc-800'
+                      selectedDoor.id === door.id ? 'border-green-500 bg-green-500/5' : 'border-zinc-800 bg-black/30 hover:border-zinc-700'
                     }`}
                   >
                     <div className="h-40 bg-zinc-950">
@@ -311,8 +356,8 @@ NT$ ${totalPrice.toLocaleString()} 元
                       </div>
                     </div>
                     <div className="p-5">
-                      <div className="font-bold mb-2 text-white">{opt.name}</div>
-                      <div className="text-green-400 font-bold font-mono">+ NT$ {(opt.price * getMultiplier()).toLocaleString()}</div>
+                      <div className="font-bold mb-2 text-white text-sm">{opt.name}</div>
+                      <div className="text-green-400 font-bold font-mono text-sm">+ NT$ {(opt.price * getMultiplier()).toLocaleString()}</div>
                     </div>
                   </label>
                 ))}
