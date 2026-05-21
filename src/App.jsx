@@ -39,10 +39,10 @@ export default function App() {
 
   const productOptions = {
     floorPlans: {
-       '8ft': [
+      '8ft': [
         { id: '8-p1', name: '8呎 一房', price: 0 },
         { id: '8-p2', name: '8呎 一房一廳極簡風', price: 35000 },
-      ],
+      ],      
       '20ft': [
         { id: '20-p1', name: '20呎 一房一廳一衛', price: 0 },
         { id: '20-p2', name: '20呎 兩房一廳一衛極簡風', price: 35000 },
@@ -85,8 +85,8 @@ export default function App() {
   // 控制案例藝廊切換的分頁狀態
   const [activeTab, setActiveTab] = useState('exterior')
 
-  // ✅ 💡 新增：控制大圖燈箱放大顯現的狀態機（如果為 null 代表關閉，有網址代表放大該圖）
-  const [lightboxImg, setLightboxImg] = useState(null)
+  // ✅ 💡 調整：燈箱狀態機改為紀錄當前放大圖片的「索引值 (Index)」，若為 null 則代表關閉
+  const [lightboxIndex, setLightboxIndex] = useState(null)
 
   /* ====================================
      3. BUSINESS LOGIC (演算法與加總邏輯)
@@ -110,7 +110,8 @@ export default function App() {
   const handleCheckboxChange = (id) => {
     setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
   }
-// ✅ 💡 新增：燈箱左右滑動切換相片函式
+
+  // ✅ 💡 新增：燈箱左右滑動切換相片函式
   const handlePrevImage = (e) => {
     e.stopPropagation() // 防止觸發背景關閉
     const currentList = galleryData[activeTab]
@@ -184,7 +185,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             rel="noreferrer"
             className="bg-green-500 text-black px-5 py-3 rounded-xl font-bold hover:scale-105 transition text-sm"
           >
-            LINE顧問
+            LINE 顧問
           </a>
         </div>
       </header>
@@ -205,7 +206,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             </p>
             <div className="flex flex-wrap gap-4">
               <a href="#configurator" className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">
-                選擇您的配置
+                開始選定配置
               </a>
               <a href="#investment" className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition">
                 投資方案
@@ -251,7 +252,7 @@ NT$ ${totalPrice.toLocaleString()} 元
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl font-black text-white mb-2">實景案例範例藝廊</h2>
-            <p className="text-zinc-500 text-sm">點選分頁瀏覽設計實景。點擊任何一張相片即可【放大全螢幕觀看】。</p>
+            <p className="text-zinc-500 text-sm">點選分頁瀏覽設計實景。點擊相片可全螢幕放大並支援左右滑動切換。</p>
           </div>
           {/* 分頁 Tab */}
           <div className="flex bg-zinc-900/80 p-1.5 rounded-2xl border border-zinc-800 w-fit self-start md:self-auto">
@@ -281,8 +282,8 @@ NT$ ${totalPrice.toLocaleString()} 元
           {galleryData[activeTab].map((src, index) => (
             <div 
               key={index} 
-              // ✅ 點擊時觸發狀態機，將當前圖片網址丟入Lightbox狀態
-              onClick={() => setLightboxImg(src)}
+              // ✅ 點擊時傳入該照片的索引值
+              onClick={() => setLightboxIndex(index)}
               className="aspect-video bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden shadow-md group relative cursor-zoom-in"
             >
               <img 
@@ -330,7 +331,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             <div className="bg-zinc-900/30 border border-zinc-800 rounded-3xl p-8">
               <h3 className="text-2xl font-black mb-6 text-green-400">格局配置</h3>
               <select
-                value={selectedPlan?.id || ''}
+                value={selectedPlan?.id}
                 onChange={(e) => setSelectedPlan(currentFloorPlans.find((p) => p.id === e.target.value) || null)}
                 className="w-full bg-black border border-zinc-800 rounded-xl p-4 text-white outline-none focus:border-green-500 cursor-pointer"
               >
@@ -464,7 +465,7 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-     {/* FOOTER */}
+      {/* FOOTER */}
       <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
         <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
       </footer>
