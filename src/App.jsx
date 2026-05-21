@@ -464,34 +464,54 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
-      {/* FOOTER */}
+     {/* FOOTER */}
       <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
         <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
       </footer>
 
-      {/* ✅ 💡 新增：高質感全螢幕大圖彈出燈箱組件 (Lightbox) */}
-      {lightboxImg && (
+      {/* ✅ 💡 升級：全新高質感全螢幕滑動燈箱組件 (Lightbox with Navigation) */}
+      {lightboxIndex !== null && (
         <div 
-          onClick={() => setLightboxImg(null)} // 點選背景任何地方立刻關閉縮回
-          className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 cursor-zoom-out animate-fadeIn"
+          onClick={() => setLightboxIndex(null)} 
+          className="fixed inset-0 bg-black/95 backdrop-blur-md z-[100] flex items-center justify-between p-4 md:p-8 animate-fadeIn select-none"
         >
+          {/* 左切換箭頭鈕 */}
+          <button 
+            onClick={handlePrevImage}
+            className="w-12 h-12 md:w-16 md:h-16 bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800/50 rounded-full flex items-center justify-center text-white text-2xl transition shadow-xl z-50 cursor-pointer"
+          >
+            ‹
+          </button>
+
+          {/* 放大後的實體大圖容器 */}
+          <div className="relative max-w-5xl max-h-[82vh] rounded-2xl overflow-hidden border border-zinc-900 shadow-2xl bg-black flex items-center justify-center mx-2 flex-1">
+            <img 
+              src={galleryData[activeTab][lightboxIndex]} 
+              alt="Gallery Large Preview" 
+              className="w-full h-full object-contain max-h-[82vh] transition duration-200"
+              onClick={(e) => e.stopPropagation()} 
+            />
+            {/* 底部相片張數小進度條 */}
+            <div className="absolute bottom-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-zinc-400">
+              {lightboxIndex + 1} / {galleryData[activeTab].length}
+            </div>
+          </div>
+
+          {/* 右切換箭頭鈕 */}
+          <button 
+            onClick={handleNextImage}
+            className="w-12 h-12 md:w-16 md:h-16 bg-zinc-900/60 hover:bg-zinc-800/80 border border-zinc-800/50 rounded-full flex items-center justify-center text-white text-2xl transition shadow-xl z-50 cursor-pointer"
+          >
+            ›
+          </button>
+
           {/* 右上角獨立關閉按鈕 */}
           <button 
-            onClick={() => setLightboxImg(null)}
-            className="absolute top-6 right-6 w-12 h-12 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 rounded-full flex items-center justify-center text-white text-xl font-bold transition z-50 shadow-lg"
+            onClick={() => setLightboxIndex(null)}
+            className="absolute top-6 right-6 w-12 h-12 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 rounded-full flex items-center justify-center text-white text-lg font-bold transition z-[110] shadow-md cursor-pointer"
           >
             ✕
           </button>
-          
-          {/* 放大後的實體大圖大圖 */}
-          <div className="relative max-w-5xl max-h-[85vh] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950 flex items-center justify-center">
-            <img 
-              src={lightboxImg} 
-              alt="Lightbox Large Preview" 
-              className="w-full h-full object-contain max-h-[85vh]"
-              onClick={(e) => e.stopPropagation()} // 防止點選大圖本身觸發關閉
-            />
-          </div>
         </div>
       )}
 
