@@ -11,10 +11,10 @@ export default function App() {
   ====================================== */
 
   const products = [
-    { id: '8ft', name: '8呎｜特殊款', desc: '適合農地資材室、展廳、新增空間與臨時辦公空間', size: '8ft', price: 200000 },
-    { id: '20ft', name: '20呎｜入門款', desc: '適合農地農舍、個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
-    { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
-    { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
+    { id: '8ft', name: '8呎｜特殊款-無衛浴', desc: '適合農地資材室、展廳、新增空間與臨時辦公空間', size: '8ft', price: 200000 },
+    { id: '20ft', name: '20呎｜入門款-室內約11坪', desc: '適合農地農舍、個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
+    { id: '30ft', name: '30呎｜主力款-室內約15坪', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
+    { id: '40ft', name: '40呎｜投資款-室內約21坪', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
   ]
 
   const features = [
