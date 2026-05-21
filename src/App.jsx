@@ -11,8 +11,8 @@ export default function App() {
   ====================================== */
 
   const products = [
-    { id: '8ft', name: '8呎｜特殊款', desc: '適合展廳、新增空間與臨時辦公空間', size: '8ft', price: 200000 },
-    { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
+    { id: '8ft', name: '8呎｜特殊款', desc: '適合農地資材室、展廳、新增空間與臨時辦公空間', size: '8ft', price: 200000 },
+    { id: '20ft', name: '20呎｜入門款', desc: '適合農地農舍、個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
     { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
     { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
   ]
@@ -447,15 +447,16 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="border border-zinc-800 rounded-3xl p-8 bg-zinc-900/20">
-            <h3 className="text-2xl font-bold text-green-400 mb-4">民宿投資方案</h3>
+            <h3 className="text-2xl font-bold text-green-400 mb-4">民宿投資、合法農舍方案</h3>
             <ul className="space-y-4 text-zinc-300 text-sm">
               <li>• 快速部署營運</li>
+              <li>• 可合法建物申請</li>
               <li>• 可移動式資產</li>
-              <li>• AI 智慧管理</li>
+              <li>• 鋼體結構可送簽證</li>
             </ul>
           </div>
           <div className="border border-zinc-800 rounded-3xl p-8 bg-zinc-900/20">
-            <h3 className="text-2xl font-bold text-green-400 mb-4">ESG 企業宿舍</h3>
+            <h3 className="text-2xl font-bold text-green-400 mb-4">ESG 企業宿舍使用靈活</h3>
             <ul className="space-y-4 text-zinc-300 text-sm">
               <li>• 綠能與減碳</li>
               <li>• 模組化快速建置</li>
