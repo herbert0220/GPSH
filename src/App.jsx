@@ -11,6 +11,7 @@ export default function App() {
   ====================================== */
 
   const products = [
+    { id: '8ft', name: '8呎｜特殊款', desc: '適合展廳、新增空間與臨時辦公空間', size: '8ft', price: 200000 },
     { id: '20ft', name: '20呎｜入門款', desc: '適合個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
     { id: '30ft', name: '30呎｜主力款', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
     { id: '40ft', name: '40呎｜投資款', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
@@ -38,6 +39,10 @@ export default function App() {
 
   const productOptions = {
     floorPlans: {
+       '8ft': [
+        { id: '8-p1', name: '8呎 一房', price: 0 },
+        { id: '8-p2', name: '8呎 一房一廳極簡風', price: 35000 },
+      ],
       '20ft': [
         { id: '20-p1', name: '20呎 一房一廳一衛', price: 0 },
         { id: '20-p2', name: '20呎 兩房一廳一衛極簡風', price: 35000 },
@@ -60,9 +65,9 @@ export default function App() {
 
   // 📸 實景相片編列路徑庫
   const galleryData = {
-    exterior: Array.from({ length: 24 }, (_, i) => `/ext-${i + 1}.png`),
+    exterior: Array.from({ length: 16 }, (_, i) => `/ext-${i + 1}.png`),
     interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
-    floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
+    floor2: Array.from({ length: 5 }, (_, i) => `/floor2-${i + 1}.png`)
   }
 
   /* ====================================
@@ -88,6 +93,7 @@ export default function App() {
   ====================================== */
 
   const getMultiplier = () => {
+    if (activeProduct?.id === '8ft') return 0.8
     if (activeProduct?.id === '30ft') return 1.5
     if (activeProduct?.id === '40ft') return 2
     return 1
@@ -103,6 +109,18 @@ export default function App() {
 
   const handleCheckboxChange = (id) => {
     setSelectedOptions((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
+// ✅ 💡 新增：燈箱左右滑動切換相片函式
+  const handlePrevImage = (e) => {
+    e.stopPropagation() // 防止觸發背景關閉
+    const currentList = galleryData[activeTab]
+    setLightboxIndex((prevIndex) => (prevIndex === 0 ? currentList.length - 1 : prevIndex - 1))
+  }
+
+  const handleNextImage = (e) => {
+    e.stopPropagation() // 防止觸發背景關閉
+    const currentList = galleryData[activeTab]
+    setLightboxIndex((prevIndex) => (prevIndex === currentList.length - 1 ? 0 : prevIndex + 1))
   }
 
   const basePrice = activeProduct?.price || 0
@@ -166,7 +184,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             rel="noreferrer"
             className="bg-green-500 text-black px-5 py-3 rounded-xl font-bold hover:scale-105 transition text-sm"
           >
-            LINE 顧問
+            LINE顧問
           </a>
         </div>
       </header>
@@ -187,7 +205,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             </p>
             <div className="flex flex-wrap gap-4">
               <a href="#configurator" className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition">
-                開始客製配置
+                選擇您的配置
               </a>
               <a href="#investment" className="border border-zinc-700 px-8 py-4 rounded-2xl hover:bg-zinc-900 transition">
                 投資方案
