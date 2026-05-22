@@ -15,6 +15,7 @@ export default function App() {
     { id: '20ft', name: '20呎｜入門款-室內約11坪', desc: '適合農地農舍、個人居住、工地宿舍與臨時辦公空間', size: '20ft', price: 350000 },
     { id: '30ft', name: '30呎｜主力款-室內約15坪', desc: '民宿與小家庭最佳配置', size: '30ft', price: 450000 }, 
     { id: '40ft', name: '40呎｜投資款-室內約21坪', desc: '三房雙衛、高報酬收租型產品', size: '40ft', price: 680000 }, 
+    { id: '2f', name: '2層屋｜設計款-室內約40坪', desc: '交誼廳、廚房雙衛三房、豪華訂製產品', size: '2f', price: 1280000 },
   ]
 
   const features = [
@@ -55,6 +56,10 @@ export default function App() {
         { id: '40-p1', name: '40呎 三房雙衛豪華版', price: 0 },
         { id: '40-p2', name: '40呎 四房雙衛收租型', price: 85000 },
       ],
+      '2f': [
+        { id: '40-20', name: '套裝現有設計款', price: 0 },
+        { id: '40-30', name: '私訂款', price: 200000 },
+      ],      
     },
     entranceDoors: [
       { id: 'd1', name: '標準鋼製防盜門', price: 0, img: '/door-d1.png' },
@@ -67,7 +72,7 @@ export default function App() {
   const galleryData = {
     exterior: Array.from({ length: 16 }, (_, i) => `/ext-${i + 1}.png`),
     interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
-    floor2: Array.from({ length: 5 }, (_, i) => `/floor2-${i + 1}.png`)
+    floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
   }
 
   /* ====================================
@@ -96,6 +101,7 @@ export default function App() {
     if (activeProduct?.id === '8ft') return 0.8
     if (activeProduct?.id === '30ft') return 1.5
     if (activeProduct?.id === '40ft') return 2
+    if (activeProduct?.id === '2f') return 3
     return 1
   }
 
