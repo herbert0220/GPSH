@@ -197,7 +197,7 @@ NT$ ${totalPrice.toLocaleString()} 元
      4. JSX RENDERING (外觀佈局與多功能藝廊)
   ====================================== */
   return (
-    <div className="bg-black text-white min-h-screen overflow-x-hidden font-sans relative">
+    <div className="apple-theme bg-black text-white min-h-screen overflow-x-hidden font-sans relative">
 
       {/* HEADER */}
       <header className="sticky top-0 z-50 bg-black/70 backdrop-blur-xl border-b border-zinc-900">
