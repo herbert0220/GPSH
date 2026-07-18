@@ -1,0 +1,28 @@
+name: Update website media
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/media/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run generate:media
+      - name: Save updated media list
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/media-manifest.json
+          git diff --cached --quiet || git commit -m "Update website media library"
+          git push

@@ -1,0 +1,39 @@
+{
+  "exterior": [
+    "/ext-1.png",
+    "/ext-2.png",
+    "/ext-3.png",
+    "/ext-4.png",
+    "/ext-5.png",
+    "/ext-6.png",
+    "/ext-7.png",
+    "/ext-8.png",
+    "/ext-9.png",
+    "/ext-10.png",
+    "/ext-11.png",
+    "/ext-12.png",
+    "/ext-13.png",
+    "/ext-14.png",
+    "/ext-15.png",
+    "/ext-16.png"
+  ],
+  "interior": [
+    "/int-1.png",
+    "/int-2.png",
+    "/int-3.png",
+    "/int-4.png",
+    "/int-5.png"
+  ],
+  "floor2": [
+    "/floor2-1.png",
+    "/floor2-2.png",
+    "/floor2-3.png",
+    "/floor2-4.png",
+    "/floor2-5.png",
+    "/floor2-6.png"
+  ],
+  "videos": [
+    "/house-video.mp4"
+  ],
+  "generatedAt": "2026-07-18T06:36:58.273Z"
+}

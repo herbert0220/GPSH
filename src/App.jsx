@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './index.css'
 
 export default function App() {
 
   // LINE 官方顧問連結
   const lineUrl = 'https://lin.ee/uNjqsw8'
+  const mediaUploadUrl = 'https://github.com/herbert0220/GPSH/upload/main/public/media'
 
   /* ====================================
      1. DATA DEFINITIONS (完整產品、選配與格局資料庫)
@@ -68,11 +69,11 @@ export default function App() {
     ],
   }
 
-  // 📸 實景相片編列路徑庫
-  const galleryData = {
+  const fallbackMedia = {
     exterior: Array.from({ length: 16 }, (_, i) => `/ext-${i + 1}.png`),
     interior: Array.from({ length: 5 }, (_, i) => `/int-${i + 1}.png`),
-    floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`)
+    floor2: Array.from({ length: 6 }, (_, i) => `/floor2-${i + 1}.png`),
+    videos: ['/house-video.mp4']
   }
 
   /* ====================================
@@ -89,6 +90,25 @@ export default function App() {
 
   // 控制案例藝廊切換的分頁狀態
   const [activeTab, setActiveTab] = useState('exterior')
+  const [mediaLibrary, setMediaLibrary] = useState(fallbackMedia)
+
+  useEffect(() => {
+    fetch(`/media-manifest.json?v=${Date.now()}`)
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => setMediaLibrary({
+        exterior: data.exterior?.length ? data.exterior : fallbackMedia.exterior,
+        interior: data.interior?.length ? data.interior : fallbackMedia.interior,
+        floor2: data.floor2?.length ? data.floor2 : fallbackMedia.floor2,
+        videos: data.videos?.length ? data.videos : fallbackMedia.videos
+      }))
+      .catch(() => setMediaLibrary(fallbackMedia))
+  }, [])
+
+  const galleryData = useMemo(() => ({
+    exterior: mediaLibrary.exterior,
+    interior: mediaLibrary.interior,
+    floor2: mediaLibrary.floor2
+  }), [mediaLibrary])
 
   // ✅ 💡 調整：燈箱狀態機改為紀錄當前放大圖片的「索引值 (Index)」，若為 null 則代表關閉
   const [lightboxIndex, setLightboxIndex] = useState(null)
@@ -185,14 +205,10 @@ NT$ ${totalPrice.toLocaleString()} 元
           <div className="text-2xl font-black tracking-widest">
             GPSH<span className="text-green-500 ml-2">SMART HOUSE</span>
           </div>
-          <a
-            href={lineUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="bg-green-500 text-black px-5 py-3 rounded-xl font-bold hover:scale-105 transition text-sm"
-          >
-            LINE 顧問
-          </a>
+          <div className="flex items-center gap-3">
+            <a href="#gallery" className="hidden md:block text-sm text-zinc-400 hover:text-white transition">案例展示</a>
+            <a href={lineUrl} target="_blank" rel="noreferrer" className="bg-green-500 text-black px-5 py-3 rounded-xl font-bold hover:scale-105 transition text-sm">LINE 顧問</a>
+          </div>
         </div>
       </header>
 
@@ -236,7 +252,7 @@ NT$ ${totalPrice.toLocaleString()} 元
             <p className="text-zinc-400 leading-relaxed">模組化生產，快速現場展開。</p>
           </div>
           <div className="relative aspect-[9/16] max-w-[340px] mx-auto rounded-[32px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-950">
-            <video className="w-full h-full object-cover cursor-pointer" src="/house-video.mp4" poster="/house-main.png" controls loop />
+            <video className="w-full h-full object-cover cursor-pointer" src={mediaLibrary.videos[0]} poster="/house-main.png" controls playsInline loop />
           </div>
         </div>
       </section>
@@ -254,7 +270,7 @@ NT$ ${totalPrice.toLocaleString()} 元
       </section>
 
       {/* 📸 實景案例範例藝廊 */}
-      <section className="max-w-7xl mx-auto px-6 py-20 border-b border-zinc-900">
+      <section id="gallery" className="max-w-7xl mx-auto px-6 py-20 border-b border-zinc-900 scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl font-black text-white mb-2">實景案例範例藝廊</h2>
@@ -304,6 +320,17 @@ NT$ ${totalPrice.toLocaleString()} 元
             </div>
           ))}
         </div>
+
+        {mediaLibrary.videos.length > 1 && (
+          <div className="mt-14">
+            <h3 className="text-2xl font-black mb-6">最新影片</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {mediaLibrary.videos.slice(1).map((src, index) => (
+                <video key={src} src={src} controls playsInline preload="metadata" className="w-full aspect-video object-cover rounded-2xl border border-zinc-800 bg-zinc-950" aria-label={`GPSH 案例影片 ${index + 2}`} />
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* CONFIGURATOR */}
@@ -475,6 +502,7 @@ NT$ ${totalPrice.toLocaleString()} 元
       {/* FOOTER */}
       <footer className="border-t border-zinc-900 bg-zinc-950 py-12 text-center text-xs text-zinc-600">
         <p>© 2026 GPSH SMART HOUSE. All rights reserved.</p>
+        <a href={mediaUploadUrl} target="_blank" rel="noreferrer" className="inline-block mt-4 text-zinc-700 hover:text-green-500 transition">網站內容更新</a>
       </footer>
 
       {/* ✅ 💡 升級：全新高質感全螢幕滑動燈箱組件 (Lightbox with Navigation) */}

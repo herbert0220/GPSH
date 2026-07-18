@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "generate:media": "node scripts/generate-media-manifest.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },
