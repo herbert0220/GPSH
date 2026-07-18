@@ -244,6 +244,23 @@ NT$ ${totalPrice.toLocaleString()} 元
         </div>
       </section>
 
+      {/* LATEST VIDEOS */}
+      {mediaLibrary.videos.length > 1 && (
+        <section className="border-b border-zinc-900">
+          <div className="max-w-7xl mx-auto px-6 py-20">
+            <div className="mb-10">
+              <h2 className="text-3xl font-black mb-2">最新影片</h2>
+              <p className="text-zinc-500 text-sm">翼展屋最新實景、施工與產品展示。</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {mediaLibrary.videos.slice(1).map((src, index) => (
+                <video key={src} src={src} controls playsInline preload="metadata" className="w-full aspect-video object-cover rounded-2xl border border-zinc-800 bg-zinc-950" aria-label={`GPSH 最新影片 ${index + 1}`} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* VIDEO */}
       <section className="border-b border-zinc-900">
         <div className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
@@ -321,16 +338,6 @@ NT$ ${totalPrice.toLocaleString()} 元
           ))}
         </div>
 
-        {mediaLibrary.videos.length > 1 && (
-          <div className="mt-14">
-            <h3 className="text-2xl font-black mb-6">最新影片</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {mediaLibrary.videos.slice(1).map((src, index) => (
-                <video key={src} src={src} controls playsInline preload="metadata" className="w-full aspect-video object-cover rounded-2xl border border-zinc-800 bg-zinc-950" aria-label={`GPSH 案例影片 ${index + 2}`} />
-              ))}
-            </div>
-          </div>
-        )}
       </section>
 
       {/* CONFIGURATOR */}
