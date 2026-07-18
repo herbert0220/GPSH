@@ -15,7 +15,9 @@
     "/ext-13.png",
     "/ext-14.png",
     "/ext-15.png",
-    "/ext-16.png"
+    "/ext-16.png",
+    "/media/exterior/10%E5%B0%BA%E5%8F%8C%E7%BF%BC.jpg",
+    "/media/exterior/10%E5%B0%BA%E5%8F%8C%E7%BF%BC%E9%87%91%E5%B1%9E%E9%9B%95%E8%8A%B1%E6%9D%BF2.jpg"
   ],
   "interior": [
     "/int-1.png",
@@ -33,7 +35,10 @@
     "/floor2-6.png"
   ],
   "videos": [
-    "/house-video.mp4"
+    "/house-video.mp4",
+    "/media/videos/10%E5%B0%BA%E5%86%85%E9%83%A8%E8%A7%86%E9%A2%91.mp4",
+    "/media/videos/10%E5%B0%BA%E5%8F%8C%E7%BF%BC.mp4",
+    "/media/videos/10%E5%B0%BA%E5%8F%8C%E7%BF%BC%E9%87%91%E5%B1%9E%E9%9B%95%E8%8A%B1%E6%9D%BF.mp4"
   ],
-  "generatedAt": "2026-07-18T07:08:37.896Z"
+  "generatedAt": "2026-07-18T07:25:22.166Z"
 }
